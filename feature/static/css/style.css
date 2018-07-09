@@ -68,7 +68,7 @@ body, html {
         margin:7px 0px 0px 7px;
     }
     .toggle-navigation{
-        float: right;
+        float:right;
         margin:7px 7px 0px 7px;
         cursor:pointer;
         display:inline-block;
