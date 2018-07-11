@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title></title>
+        <title>Profile | My Diary</title>
         <link rel="stylesheet" type="text/css" href="static/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body id="body" class="profile-body">
         <div id="menu">
@@ -12,20 +13,93 @@
                 <div class="logo">
                     <img src="static/img/logo.png" alt="MyDiary">
                 </div>
-                <div class="toggle-navigation">
-                    <div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                    </div>
-                </div>
-                <div class="nav-links">
-                    <ul>
-                        <li><a href="login.html">Login</a></li>
-                        <li><a href="signup.html">Sign Up</a></li>
-                    </ul>
+                    
+                <div class="nav-links" id="top-navigation">
+                    <a href="#">Settings</a>
+                    <a href="#">Add Entry</a>
+                    <a href="#entries">Entries</a>
+                    <a href="javascript:void(0);" class="toggle-navigation" onclick="toggleNav()">
+                        <i class="fa fa-bars fa-2x"></i>
+                    </a>
                 </div>
             </div>
         </div>
+        <div class="profile-section">
+            <div class="profile-content">
+                <div id="profile-pic">
+                    <img src="static/img/default.jpg" alt="profile pic">
+                </div>
+                <div class="user-info">
+                    <div id="name">
+                        <p>James Mwangi</p>
+                    </div>
+                    <div class="username">
+                        <p>jmwangi38</p>
+                    </div>
+                    <div id="status">
+                        <p>I belong to Jesus</p>
+                    </div>
+                    <div class="entry-info">
+                        <a href="#entries"><p>My diary entries <span>(20)</span><p></a>                   
+                    </div>
+                </div>
+                <div class="edit-profile">
+                    <a href="#" id="button">Edit Profile</a>
+                </div>
+            </div>
+            <div class="entry-section">
+                <div id="entries">
+                    <p>My Entries</p>
+                    <hr>
+                    <div id="entry-content">
+                        <table>
+                            <tr>
+                                <th>No</th>
+                                <th>Entry Title</th>
+                                <th>Date</th>
+                                <th></th>
+                                <th><a href="#"><i class="fa fa-plus"></i></a></th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>Swimming with dolphines</td>
+                                <td>20/2/2018</td>
+                                <td><a href="#"><i class="fa fa-pencil"></i></a></td>
+                                <td><a href="#"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Going on a Safari</td>
+                                <td>21/2/2018</td>
+                                <td><a href="#"><i class="fa fa-pencil"></i></a></td>
+                                <td><a href="#"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>The days that followed</td>
+                                <td>21/2/2018</td>
+                                <td><a href="#"><i class="fa fa-pencil"></i></a></td>
+                                <td><a href="#"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Trip to the coast</td>
+                                <td>21/2/2018</td>
+                                <td><a href="#"><i class="fa fa-pencil"></i></a></td>
+                                <td><a href="#"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="footer">
+			<div class="footer-content">
+				<p>Copyright &copy; 2018 My Diary</p>
+			</div>
+        </div>
+        <!--Adding javascript files-->
+        <script type="text/javascript" src="static/js/main.js"></script>
     </body>
 </html> 
