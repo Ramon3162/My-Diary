@@ -5,24 +5,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Home | My Diary</title>
         <link rel="stylesheet" type="text/css" href="static/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body id="body" class="landing-body">
         <div id="top-menu" class="navigation">
             <div class="logo">
                 <img src="static/img/logo.png" alt="MyDiary">
             </div>
-            <div class="toggle-navigation">
-                <div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                </div>
-            </div>
-            <div class="nav-links">
-                <ul>
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="signup.html">Sign Up</a></li>
-                </ul>
+            <div class="nav-links" id="top-navigation">
+                <a href="login.html">Login</a>
+                <a href="signup.html">Sign Up</a>
+                <a href="javascript:void(0);" class="toggle-navigation" onclick="toggleNav()">
+                    <i class="fa fa-bars fa-2x"></i>
+                </a>
             </div>
         </div>
         <div class="main-content">
