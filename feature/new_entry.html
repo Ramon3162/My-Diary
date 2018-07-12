@@ -11,13 +11,13 @@
         <div id="menu">
             <div id="top-menu" class="navigation">
                 <div class="logo">
-                    <img src="static/img/logo.png" alt="MyDiary">
+                    <a href="profile.html"><img src="static/img/logo.png" alt="MyDiary"></a>
                 </div>
                     
                 <div class="nav-links" id="top-navigation">
                     <a href="#">Settings</a>
-                    <a href="#">Add Entry</a>
-                    <a href="#entries">Entries</a>
+                    <a href="new_entry.html">Add Entry</a>
+                    <a href="entry_list.html">Entries</a>
                     <a href="javascript:void(0);" class="toggle-navigation" onclick="toggleNav()">
                         <i class="fa fa-bars fa-2x"></i>
                     </a>
@@ -32,13 +32,13 @@
             <div id="entry-form-content">
                 <form action="" method="POST" id="new-entry-form">
                     <div id="form-input">
-                        <input type="text" name="title" placeholder="Title">
+                        <input type="text" name="title" placeholder="Entry Title">
                     </div id="form-input">
                     <div>
-                        <textarea name="entry" rows="7" placeholder="Text"></textarea>
+                        <textarea name="entry" rows="7" placeholder="Entry Text"></textarea>
                     </div id="form-input">
                     <div>
-                        <input type="submit" value="Post Entry" class="submit-btn" formaction="entry.html">
+                        <input type="submit" value="Publish Entry" class="submit-btn" formaction="entry.html">
                     </div>
                 </form>  
             </div>          

@@ -311,10 +311,35 @@ input[type="text"],input[type="password"]{
     margin-top:15px;
 }
 
+/*Entry List Style*/
+.entry-list-body #top-menu{
+    height:auto;
+    min-height: 65px;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.entries-section {
+    width:70%;
+    min-height:80%;
+    margin:0 auto;
+}
+
+@media (max-width: 800px){
+    .entries-section {
+        width:95%;
+        margin:0 auto;
+    }
+
+    .entry-list-body #top-menu{
+        width: 95%;
+        margin: 0 auto;
+    }
+
+}
+
 .entry-list{
     margin:25px 0px 25px 0px;
-    border:1px solid #ddd;
-    border-radius: 5px;
 }
 
 #entries p {
@@ -338,9 +363,18 @@ table {
 }
 
 th, td {
-    padding: 4px;
+    padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+}
+
+td a {
+    text-decoration: none;
+    color:#000;
+}
+
+td a:hover {
+    color:rgb(14, 144, 206);
 }
 
 table i {
@@ -405,7 +439,7 @@ tr:hover {
 }
 
 .new-entry {
-    width:70%;
+    width:60%;
     min-height:80%;
     margin:0 auto;
 }
@@ -424,6 +458,10 @@ tr:hover {
 
 .new-entry #new-entry-form {
     margin-top:20px;
+}
+
+.new-entry #form-input:focus{
+    border-color:rgb(14, 144, 206);
 }
 
 .new-entry input[type="text"]{
@@ -454,7 +492,8 @@ tr:hover {
     border:1px solid #ddd;
     border-radius:5px;
     font-size:16px;
-    padding-left:20px;
+    font-family: 'Montserrat', sans-serif;
+    padding:8px 0px 0px 20px;
 }
 /*Footer style*/
 #footer {
