@@ -398,6 +398,50 @@ tr:hover {
     background-color:#f5f5f5;
 }
 
+/*Entry Style*/
+.entry-body #top-menu{
+    height:auto;
+    min-height: 65px;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.entry-section {
+    width:70%;
+    min-height:80%;
+    margin:0 auto;
+}
+
+@media (max-width: 800px){
+    .entry-section {
+        width:95%;
+        margin:0 auto;
+    }
+
+    .entry-body #top-menu{
+        width: 95%;
+        margin: 0 auto;
+    }
+
+}
+
+#edit-icons{
+    margin:25px 5px 0px 0px;
+}
+
+#edit-icons i {
+    color:rgb(14, 144, 206);
+    margin:10px;
+}
+
+#add-btn{
+    margin:15px 0px 15px 5px;
+}
+
+#entry-title {
+    display: flex;
+    justify-content: space-between;
+}
 /*Footer style*/
 #footer {
 	background-color:rgb(5, 16, 32);
