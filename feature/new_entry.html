@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>New Entry | My Diary</title>
+        <link rel="stylesheet" type="text/css" href="static/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body id="body" class="new-entry-body">
+        <div id="menu">
+            <div id="top-menu" class="navigation">
+                <div class="logo">
+                    <a href="profile.html"><img src="static/img/logo.png" alt="MyDiary"></a>
+                </div>
+                    
+                <div class="navigation">
+                    <div class="toggle-navigation">
+                        <a href="javascript:void(0);" onclick="openNav()">
+                        <i class="fa fa-bars fa-2x"></i></a>
+                    </div>
+                    <div class="nav-links" id="top-navigation">
+                        <div class="dropdown">
+                                <div class="dropbtn">
+                                <a href="#">Settings&nbsp;<i class="fa fa-caret-down"></i></a>
+                            </div>
+                            <div class="dropdown-content">
+                                <a href="#">Reminders</a>
+                                <a href="landing.html">Logout</a>
+                            </div>
+                        </div>
+                        <a href="new_entry.html">Add Entry</a>
+                        <a href="entry_list.html">Entries</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="new-entry">
+            <div id="new-entry-title">
+                <h3>Add New Entry</h3>
+                <hr>
+            </div>
+            <div id="entry-form-content">
+                <form action="" method="POST" id="new-entry-form">
+                    <div id="form-input">
+                        <input type="text" name="title" placeholder="Entry Title">
+                    </div id="form-input">
+                    <div>
+                        <textarea name="entry" rows="7" placeholder="Entry Text"></textarea>
+                    </div id="form-input">
+                    <div>
+                        <input type="submit" value="Publish Entry" class="submit-btn" formaction="entry.html">
+                    </div>
+                </form>  
+            </div>          
+        </div>
+        
+        <div id="footer">
+			<div class="footer-content">
+				<p>Copyright &copy; 2018 My Diary</p>
+			</div>
+        </div>
+        <!--Adding javascript files-->
+        <script type="text/javascript" src="static/js/main.js"></script>
+    </body>
+</html> 

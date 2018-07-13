@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Profile | My Diary</title>
+        <link rel="stylesheet" type="text/css" href="static/css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body id="body" class="profile-body">
+        <div id="menu">
+            <div id="top-menu" class="navigation">
+                <div class="logo">
+                    <img src="static/img/logo.png" alt="MyDiary">
+                </div>
+                    
+                <div class="navigation">
+                    <div class="toggle-navigation">
+                        <a href="javascript:void(0);" onclick="openNav()">
+                        <i class="fa fa-bars fa-2x"></i></a>
+                    </div>
+                    <div class="nav-links" id="top-navigation">
+                        <div class="dropdown">
+                            <div class="dropbtn">
+                                <a href="#">Settings&nbsp;<i class="fa fa-caret-down"></i></a>
+                            </div>
+                            <div class="dropdown-content">
+                                <a href="#">Reminders</a>
+                                <a href="landing.html">Logout</a>
+                            </div>
+                        </div>
+                        <a href="new_entry.html">Add Entry</a>
+                        <a href="entry_list.html">Entries</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-section">
+            <div class="profile-content">
+                <div id="profile-pic">
+                    <img src="static/img/default.jpg" alt="profile pic">
+                </div>
+                <div class="user-profile">
+                    <div class="user-info">
+                        <div id="name">
+                            <h2>James Mwangi</h2>
+                        </div>
+                        <div class="username">
+                            <p>jmwangi38</p>
+                        </div>
+                        <div id="status">
+                            <p>I belong to Jesus</p>
+                        </div>
+                    </div>
+                    <div class="user-data">
+                        <div class="entry-info">
+                            <br>
+                            <a href="entry_list.html"><p><i class="fa fa-book"></i> &nbsp My diary entries <span>(20)</span><p></a>                   
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-profile">
+                    <a href="#" id="button">Edit Profile</a>
+                </div>
+            </div>            
+        </div>
+
+        <div id="footer">
+			<div class="footer-content">
+				<p>Copyright &copy; 2018 My Diary</p>
+			</div>
+        </div>
+        <!--Adding javascript files-->
+        <script type="text/javascript" src="static/js/main.js"></script>
+    </body>
+</html> 
