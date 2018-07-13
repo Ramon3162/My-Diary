@@ -168,9 +168,9 @@ body, html {
     color:gray;
     display: flex;
     justify-content: space-between;
-    width:320px;
+    width:330px;
     margin:0 auto;
-    margin-top:25px;
+    margin-top:15px;
 }
 
 .form-content .logo img{
