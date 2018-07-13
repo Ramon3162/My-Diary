@@ -5,7 +5,7 @@ body, html {
 }
 #body{
     max-width:100%;
-    margin:auto;   
+    margin:auto;
 }
 
 /*Top-menu Style*/
@@ -23,8 +23,7 @@ body, html {
 
 .nav-links{
     margin:7px;
-    overflow: hidden;
-    margin-top:-5px;
+    margin:-7px;
 }
 
 .nav-links a{
@@ -34,7 +33,6 @@ body, html {
     color: #ddd;
     margin:25px 8px 0px 8px;
     font-size:15px;
-    
 }
 
 .nav-links a:hover{
@@ -46,8 +44,10 @@ body, html {
     background: transparent;
 }
 
-.nav-links .toggle-navigation {
+.navigation .toggle-navigation {
     display:none;
+    float:right;
+    margin:5px;
 }
 
 @media screen and (max-width: 800px){
@@ -61,29 +61,26 @@ body, html {
         display: none;
     }
 
-    .nav-links a.toggle-navigation{
+    .navigation .toggle-navigation {
         display: block;
         float:right;
         margin:15px 5px 0px 0px;
         cursor:pointer;
     }
     
-
-    .nav-links .responsive {
-        position: relative;
-    }
-
-    .nav-links .responsive .toggle-navigation {
+    .responsive {
         position: absolute;
-        right: 0;
-        top: 0;
-    }
-  
-    .nav-links .responsive a {
-        float: none;
-        display: block;
-        text-align: center;
+        width: 120px;
+        height: 100%;
+        background-color:rgba(5, 16, 32, 0.9);
       }
+    
+    .responsive a{
+        color:#fff;
+        display:block;
+        text-align: left;
+    }
+
 }
 
 /*Landing/Main-content style*/
