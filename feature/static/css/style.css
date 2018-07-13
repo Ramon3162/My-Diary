@@ -315,9 +315,6 @@ input[type="text"],input[type="password"]{
     margin-top:15px;
 }
 
-<<<<<<< Updated upstream
-.entry-section{
-=======
 .entry-info span{
     color:rgb(14, 144, 206);
     font-weight:600;
@@ -356,7 +353,6 @@ input[type="text"],input[type="password"]{
 }
 
 .entry-list{
->>>>>>> Stashed changes
     margin:25px 0px 25px 0px;
     border:1px solid #ddd;
     border-radius: 5px;
@@ -378,16 +374,12 @@ th, td {
     border-bottom: 1px solid #ddd;
 }
 
-<<<<<<< Updated upstream
-table i {
-=======
 td a {
     text-decoration: none;
     color:#fff;
 }
 
 td a:hover {
->>>>>>> Stashed changes
     color:rgb(14, 144, 206);
 }
 
