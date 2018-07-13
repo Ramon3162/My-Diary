@@ -4,10 +4,23 @@ body, html {
     height:100%;    
 }
 #body{
+<<<<<<< HEAD
     max-width:100%;
     margin:auto;   
 }
 
+=======
+    max-width: 70%;
+    margin:auto;   
+}
+
+@media (max-width: 800px){
+    #body{
+        max-width: 95%;
+    }
+}
+
+>>>>>>> signup-feature
 /*Top-menu Style*/
 #top-menu{
     height:auto;
@@ -99,6 +112,14 @@ body, html {
     }
 }
 
+<<<<<<< HEAD
+=======
+/*Landing/Main-content style*/
+.landing-body{
+    background: url(../img/diarybg.jpg) no-repeat center;
+}
+
+>>>>>>> signup-feature
 .main-content{
     float: right;
 }
@@ -152,14 +173,25 @@ body, html {
     text-align: center;
 }
 
-.page-info a{
+.page-info a,
+.form-reminder a{
     color:#fff;
     text-decoration: none;
 }
 
-.page-info a:hover{
+.page-info a:hover,
+.form-reminder a:hover{
     color:rgb(14, 144, 206);
     text-decoration: none;
+}
+
+.form-reminder{
+    color:gray;
+    display: flex;
+    justify-content: space-between;
+    width:320px;
+    margin:0 auto;
+    margin-top:25px;
 }
 
 .form-content .logo img{
