@@ -1,0 +1,14 @@
+env/
+.vscode/
+*.pyc
+tests/.pyc
+tests/__pycache__
+app/.pyc
+app/__pycache__
+instance/.pyc
+instance/__pycache__
+.cache/v/cache
+.env
+*__pycache__/
+.pytest_cache/
+
