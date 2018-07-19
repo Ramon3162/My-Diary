@@ -1,20 +1,18 @@
 """Creating the base class for all the other tests"""
 import unittest
 import json
-from unittest import TestCase
 from app import app
 
 
-class BaseTestClass(TestCase):
+class BaseTestClass():
     """Configuring the base test class for all the test cases"""
 
-    @classmethod
-    def classSetup(self):
+    
+    def setUp(self):
         """App configuration setup"""
         
         self.app = app
-        self.client = self.app.test_client()
-        
+        self.client = app.test_client()
 
         self.entry_contents = {
             'title' : 'Trip to oblivion',
@@ -29,8 +27,8 @@ class BaseTestClass(TestCase):
             'title' : 'You are in for a treat'
         }
 
-    @classmethod
-    def classTearDown(cls):
+    
+    def classTearDown(self):
         pass
 
 if __name__ == '__main__':
