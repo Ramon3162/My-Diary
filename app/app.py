@@ -23,20 +23,12 @@ entries = [
 ]
 
 entry = {
-    "id":3,
     "title": "Howdy",
     "description": "Le meilleur personne"
 }
 
 
 @app.route('/api/v1/entries', methods=['GET'])
-def get_all_entries():
-    """Gets all the entries from a user"""
-
-    return jsonify({'Entries' : entries, 'message' : 'All entries found successfully'}), 200
-
-
-@app.route('/api/v1/entries/<int:entry_id>', methods=['GET'])
 def get_single_entry(entry_id):
     """Gets a single entry from the user"""
 
