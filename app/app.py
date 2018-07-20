@@ -22,6 +22,13 @@ entries = [
     }
 ]
 
+entry = {
+    "id":3,
+    "title": "Howdy",
+    "description": "Le meilleur personne"
+}
+
+
 @app.route('/api/v1/entries', methods=['GET'])
 def get_all_entries():
     """Gets all the entries from a user"""
@@ -37,19 +44,19 @@ def get_single_entry(entry_id):
     if len(entry) == 0:
         abort(404) 
 
-    return jsonify({'Entry' : entry[0], 'message' : 'Entry found successfully'}), 200
+    return jsonify({'Entry' : entry[0], 'message' : 'Entry retrieved successfully'}), 200
 
 @app.route('/api/v1/entries', methods=['POST'])
 def create_entry():
     """Creates a single entry"""
     
-    if not request.json() or not 'tittle' in request.json():
+    if not request.json or not 'title' in request.json or not 'description' in request.json:
         abort(400)
     
     entry = {
         "id": entries[-1]['id'] + 1,
         "title": request.json['title'],
-        "description": request.json.get('description', '') 
+        "description": request.json['description']
     }
 
     entries.append(entry)
@@ -62,16 +69,16 @@ def update_entry(entry_id):
 
     entry = [entry for entry in entries if entry['id'] == entry_id]
 
-    if not request.json():
+    if not request.json:
         abort(400)
     if len(entry) == 0:
         abort(400)
     entry[0]['title'] = request.json.get('title', entry[0]['title'])
-    entry[0]['description'] = request.json.get('title', entry[0]['description'])
+    entry[0]['description'] = request.json.get('description', entry[0]['description'])
     
     return jsonify({'Entry' : entry[0], 'message': 'Entry updated successfully'})
 
-@app.route('/api/v1/entries/<int:entry_id>', methods=['DLETE'])
+@app.route('/api/v1/entries/<int:entry_id>', methods=['DELETE'])
 def delete_entry(entry_id):
     """Deletes a single entry"""
     
@@ -83,5 +90,3 @@ def delete_entry(entry_id):
 
     return jsonify({'message' : 'Entry deleted successfully'})
 
-if __name__ == "__main__":
-    app.run(debug=True)
