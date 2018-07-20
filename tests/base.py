@@ -13,11 +13,11 @@ class BaseTestClass(TestCase):
         """App configuration setup"""
         
         self.app = app
-        self.app = self.app.test_client()
+        self.client = self.app.test_client()
 
         self.entry_contents = {
             'title' : 'Trip to oblivion',
-            'description' : 'Best days of my life',
+            'description' : 'Best days of my life'
         }
 
         self.entry_no_title = {
@@ -32,4 +32,5 @@ class BaseTestClass(TestCase):
     def classTearDown(cls):
         pass
 
-
+if __name__ == '__main__':
+    unittest.main()
