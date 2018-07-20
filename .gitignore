@@ -1,6 +1,20 @@
+<<<<<<< HEAD
 *.pyc
 *__pycache__/
 .pytest_cache/
 .vscode/
 env/
 .env
+=======
+env/
+.vscode/
+*.pyc
+tests/.pyc
+tests/__pycache__
+app/.pyc
+app/__pycache__
+.env
+*__pycache__/
+.pytest_cache/
+
+>>>>>>> 9595efd5667aa50a582e702fd784391c00b3ccbd
