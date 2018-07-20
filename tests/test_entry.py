@@ -10,7 +10,7 @@ class TestEntryCase(BaseTestClass):
         """Test for posting an entry"""
         
         #Not JSON data
-        response = self.app.post('/api/v1/entries/', data=json.dumps(self.entry_contents))
+        response = self.app.post('/api/v1/entries', data=json.dumps(self.entry_contents))
         self.assertEqual(response.status_code, 400)
 
         #No title
