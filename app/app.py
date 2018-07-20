@@ -45,16 +45,14 @@ def create_entry():
     
     if not request.json() or not 'tittle' in request.json():
         abort(400)
-        
-    new_entry = entries
     
     entry = {
-        "id": new_entry[-1]['id'] + 1,
+        "id": entries[-1]['id'] + 1,
         "title": request.json['title'],
         "description": request.json.get('description', '') 
     }
 
-    new_entry.append(entry)
+    entries.append(entry)
 
     return jsonify({'Entry' : entry, 'message' : 'Entry created successfully'}), 200
 
