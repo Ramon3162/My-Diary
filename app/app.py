@@ -22,6 +22,12 @@ entries = [
     }
 ]
 
+entry = {
+    "id": 0,
+    "title": "My Name",
+    "description": "Weep not child for I am with you"
+}
+
 @app.route('/api/v1/entries', methods=['GET'])
 def get_all_entries():
     """Gets all the entries from a user"""
@@ -29,7 +35,7 @@ def get_all_entries():
     return jsonify({'Entries' : entries, 'message' : 'All entries found successfully'}), 200
 
 
-@app.route('/api/v1/entries/<int:entry_id>', methods=['GET'])
+@app.route('/api/v1/entries/1', methods=['GET'])
 def get_single_entry(entry_id):
     """Gets a single entry from the user"""
 
