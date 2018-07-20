@@ -27,8 +27,13 @@ entry = {
     "description": "Le meilleur personne"
 }
 
-
 @app.route('/api/v1/entries', methods=['GET'])
+def get_all_entries():
+    """Gets all the entries by the user"""
+
+    return jsonify({'Entries' : entries, 'message' : 'All entries found successfully'}), 200
+
+@app.route('/api/v1/entries/<int:entry_id>', methods=['GET'])
 def get_single_entry(entry_id):
     """Gets a single entry from the user"""
 
@@ -82,3 +87,5 @@ def delete_entry(entry_id):
 
     return jsonify({'message' : 'Entry deleted successfully'})
 
+if __name__ == "__main__":
+    app.run(debug=True)

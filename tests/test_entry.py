@@ -1,5 +1,5 @@
 """Testing for the methods applied to the entries"""
-from .base import BaseTestClass
+from tests.base import BaseTestClass
 from app.app import app, entries, entry
 
 import unittest
@@ -25,7 +25,7 @@ class TestEntryCase(BaseTestClass):
     def test_get_all_entries(self):
         """Test for viewing all user entries"""
         
-        response = self.app.get('/api/v1/entries',data=json.dumps(self.entries), content_type = ('application/json'))
+        response = self.app.get('/api/v1/entries', data=json.dumps(self.entries), content_type = ('application/json'))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'All entries found successfully')

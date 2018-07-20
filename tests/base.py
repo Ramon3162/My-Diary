@@ -13,7 +13,7 @@ class BaseTestClass(TestCase):
         """App configuration setup"""
         
         self.app = app
-        self.client = self.app.test_client()
+        self.app = self.app.test_client()
 
         self.entry_contents = {
             'title' : 'Trip to oblivion',
