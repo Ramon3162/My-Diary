@@ -1,6 +1,6 @@
 """Testing for the methods applied to the entries"""
 from tests.base import BaseTestClass
-from app.app import app, entries, entry
+from app import app, entries, entry
 
 import unittest
 import json
