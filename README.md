@@ -5,4 +5,4 @@
 [![Build Status](https://travis-ci.org/Ramon3162/My-Diary.svg?branch=develop)](https://travis-ci.org/Ramon3162/My-Diary)git 
 
 # My-Diary
-Andela Developer Challenge (Cohort 30)
+Andela Developer Challenge (Cohort 30).
