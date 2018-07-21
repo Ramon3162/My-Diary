@@ -27,11 +27,13 @@ entry = {
     "description": "Le meilleur personne"
 }
 
+
 @app.route('/api/v1/entries', methods=['GET'])
 def get_all_entries():
     """Gets all the entries by the user"""
 
     return jsonify({'Entries' : entries, 'message' : 'All entries found successfully'}), 200
+
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['GET'])
 def get_single_entry(entry_id):
@@ -42,6 +44,7 @@ def get_single_entry(entry_id):
         abort(404) 
 
     return jsonify({'Entry' : entry[0], 'message' : 'Entry retrieved successfully'}), 200
+
 
 @app.route('/api/v1/entries', methods=['POST'])
 def create_entry():
@@ -60,6 +63,7 @@ def create_entry():
 
     return jsonify({'Entry' : entry, 'message' : 'Entry created successfully'}), 200
 
+
 @app.route('/api/v1/entries/<int:entry_id>', methods=['PUT'])
 def update_entry(entry_id):
     """Updates a single entry"""
@@ -75,6 +79,7 @@ def update_entry(entry_id):
     
     return jsonify({'Entry' : entry[0], 'message': 'Entry updated successfully'})
 
+
 @app.route('/api/v1/entries/<int:entry_id>', methods=['DELETE'])
 def delete_entry(entry_id):
     """Deletes a single entry"""
@@ -86,4 +91,5 @@ def delete_entry(entry_id):
     entries.remove(entry[0])
 
     return jsonify({'message' : 'Entry deleted successfully'})
-    
+
+ 
