@@ -39,10 +39,15 @@ Test | API-endpoint | HTTP-Verb
 
 Test the endpoints:
 User can create a diary entry | /api/v1/entries | POST
+------------ | -------------- | ------------ 
 User can view all diary entries | /api/v1/entries | GET
+------------ | -------------- | ------------ 
 User can view a single diary entry | /api/v1/entries/<entry_id> | GET
+------------ | -------------- | ------------ 
 User can update a diary entry | /api/v1/entries/<entry_id> |PUT
+------------ | -------------- | ------------ 
 User can delete a diary entry | /api/v1/entries/<entry_id> | DELETE
+------------ | -------------- | ------------ 
 
 ## Testing
 Test the endpoints using Postman or curl
