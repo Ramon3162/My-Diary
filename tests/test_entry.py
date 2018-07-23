@@ -1,6 +1,6 @@
 """Testing for the methods applied to the entries"""
 from tests.base import BaseTestClass
-from app import app, entries, entry
+from app import app
 
 import unittest
 import json
@@ -10,20 +10,11 @@ class TestEntryCase(BaseTestClass):
     """Class testing for entry test cases"""
 
 
-    def setUp(self):
-
-        self.app = app
-        self.app = self.app.test_client()
-        self.entries = entries
-        self.entry = entry
-
-
-
     def test_post_entry(self):
         """Test for posting an entry"""
 
 
-        response = self.app.post('/api/v1/entries', data=json.dumps(self.entry), content_type = ('application/json'))
+        response = self.app.post('/api/v1/entries', data=json.dumps(self.entry_contents), content_type = ('application/json'))
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry created successfully')
 
@@ -32,7 +23,7 @@ class TestEntryCase(BaseTestClass):
         """Test for viewing all user entries"""
 
 
-        response = self.app.get('/api/v1/entries', data=json.dumps(self.entries), content_type = ('application/json'))
+        response = self.app.get('/api/v1/entries', data=json.dumps(self.entry_contents), content_type = ('application/json'))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'All entries found successfully')
