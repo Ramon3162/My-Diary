@@ -16,6 +16,26 @@ class BaseTestClass(TestCase):
         self.app = app
         self.app = self.app.test_client()
 
+        self.user = {
+            'username' : 'ramon',
+            'email' : 'ramonomondi@gmail.com',
+            'password' : '1234'
+        }
+
+        self.user_no_username = {
+            'email' : 'torivega@wawa.com',
+            'password' : 'qwerty'
+        }
+
+        self.user_no_email = {
+            'username' : 'ramon',
+            'password' : '1234'
+        }
+
+        self.user_no_password = {
+            'username' : 'ramon',
+            'email' : 'ramonomondi@gmail.com'
+        }
 
         self.entry_contents = {
             'title' : 'Trip to oblivion',
