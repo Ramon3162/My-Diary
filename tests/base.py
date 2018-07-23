@@ -14,7 +14,7 @@ class BaseTestClass(TestCase):
         """App configuration setup"""
         
         self.app = app
-        self.app = self.app.test_client()
+        self.client = self.app.test_client()
 
         self.user = {
             'username' : 'ramon',
@@ -60,4 +60,3 @@ class BaseTestClass(TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
