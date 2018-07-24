@@ -13,17 +13,23 @@ class TestEntryCase(BaseTestClass):
     def test_post_entry(self):
         """Test for posting an entry"""
 
-
-        response = self.app.post('/api/v1/entries', data=json.dumps(self.entry_contents), content_type = ('application/json'))
+        
+        response = self.client.post('/api/v1/entries',
+                                    data=json.dumps(self.entry_contents),
+                                    content_type=('application/json'))
+        self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry created successfully')
 
+        
 
     def test_get_all_entries(self):
         """Test for viewing all user entries"""
 
-
-        response = self.app.get('/api/v1/entries', data=json.dumps(self.entry_contents), content_type = ('application/json'))
+        
+        response = self.client.get('/api/v1/entries',
+                                    data=json.dumps(self.entry_contents),
+                                    content_type = ('application/json'))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'All entries found successfully')
@@ -33,7 +39,9 @@ class TestEntryCase(BaseTestClass):
         """Test for viewing a single entry"""
 
 
-        response = self.app.get('/api/v1/entries/1', content_type = ('application/json'))
+        response = self.client.get('/api/v1/entries/1',
+                                    data=json.dumps(self.entry_contents),
+                                    content_type=('application/json'))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry retrieved successfully')
@@ -43,7 +51,9 @@ class TestEntryCase(BaseTestClass):
         """Test for updating an entry"""
 
 
-        response = self.app.put('/api/v1/entries/1', data=json.dumps(dict(title="Name")), content_type = ('application/json'))
+        response = self.client.put('/api/v1/entries/1',
+                                    data=json.dumps(dict(title="Name")),
+                                    content_type=('application/json'))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry updated successfully')
@@ -53,7 +63,8 @@ class TestEntryCase(BaseTestClass):
         """Test for deleting an entry"""
 
 
-        response = self.app.delete('/api/v1/entries/0', content_type = ('application/json'))
+        response = self.client.delete('/api/v1/entries/0',
+                                    content_type=('application/json'))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry deleted successfully')
@@ -61,4 +72,3 @@ class TestEntryCase(BaseTestClass):
 
 if __name__ == '__main__':
     unittest.main()
-
