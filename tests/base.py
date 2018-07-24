@@ -14,9 +14,9 @@ class BaseTestClass(TestCase):
         """App configuration setup"""
         
         self.app = app
-        self.client = self.app.test_client()
+        self.client = app.test_client()
 
-        self.user = {
+        self.user_details = {
             'username' : 'ramon',
             'email' : 'ramonomondi@gmail.com',
             'password' : '1234'
