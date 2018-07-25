@@ -1,12 +1,8 @@
 function openNav() {
-    let nav = document.getElementById("top-navigation");
-    if (nav.className === "nav-links") {
-        nav.className += " responsive";
+    var x = document.getElementById("top-navigation");
+    if (x.className === "nav-links") {
+        x.className += " responsive";
     } else {
-        nav.className = "nav-links";
+        x.className = "nav-links";
     }
-}
-
-function confirmDelete() {
-    confirm("Are you sure you want to delete this entry?")
 }
