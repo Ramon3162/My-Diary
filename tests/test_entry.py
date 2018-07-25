@@ -13,13 +13,29 @@ class TestEntryCase(BaseTestClass):
     def test_post_entry(self):
         """Test for posting an entry"""
 
-        
+        # Correct entry format
         response = self.client.post('/api/v1/entries',
                                     data=json.dumps(self.entry_contents),
                                     content_type=('application/json'))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry created successfully')
+
+        # No title
+        response = self.client.post('/api/v1/entries',
+                                    data=json.dumps(self.entry_no_title),
+                                    content_type=('application/json'))
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], 'Title is required')
+
+        # No description
+        response = self.client.post('/api/v1/entries',
+                                    data=json.dumps(self.entry_no_description),
+                                    content_type=('application/json'))
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], 'Description is required')
 
         
 
