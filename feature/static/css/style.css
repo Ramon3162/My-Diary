@@ -171,14 +171,14 @@ body, html {
 .signup-body,
 .login-body{
     width:70%;
-    background-color:rgb(19, 45, 83);
+    background-color:rgb(5, 16, 32);
 }
 
 
 @media (max-width: 800px){
     .login-body,
     .signup-body{
-        width: 100%;
+        width: 95%;
         margin:0 auto;
     }
 }
@@ -493,7 +493,6 @@ tr:hover {
 }
 
 /*New entry page style*/
-.edit-entry-body #top-menu,
 .new-entry-body #top-menu{
     height:auto;
     min-height: 65px;
@@ -501,7 +500,6 @@ tr:hover {
     margin: 0 auto;
 }
 
-.edit-entry,
 .new-entry {
     width:60%;
     min-height:80%;
@@ -509,30 +507,25 @@ tr:hover {
 }
 
 @media (max-width: 800px){
-    .edit-entry,
     .new-entry {
         width:95%;
         margin:0 auto;
     }
 
-    .edit-entry-body #top-menu,
     .new-entry-body #top-menu{
         width: 100%;
         margin: 0 auto;
     }
 }
 
-.edit-entry #edit-entry-form,
 .new-entry #new-entry-form {
     margin-top:20px;
 }
 
-.edit-entry #form-input:focus,
 .new-entry #form-input:focus{
     border-color:rgb(14, 144, 206);
 }
 
-.edit-entry input[type="text"],
 .new-entry input[type="text"]{
 	height:45px;
     width:95%;
@@ -544,7 +537,6 @@ tr:hover {
     border:1px solid #ddd;
 }
 
-.edit-entry .submit-btn,
 .new-entry .submit-btn{
     height:45px;
     width:200px;
@@ -557,7 +549,6 @@ tr:hover {
 	background-color:rgb(14, 144, 206);
 }
 
-.edit-entry textarea,
 .new-entry textarea {
     width:95%;
     border:1px solid #ddd;
