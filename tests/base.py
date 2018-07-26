@@ -2,7 +2,7 @@
 import unittest
 import json
 from unittest import TestCase
-from app import app
+from app.app import app
 
 
 class BaseTestClass(TestCase):
