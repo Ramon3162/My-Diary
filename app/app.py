@@ -37,19 +37,13 @@ users = [
 def get_all_entries():
     """Gets all the entries by the user"""
 
-    return jsonify({'Entries' : entries, 'message' : 'All entries found successfully'}), 200
-
+    return theDatabase().get_all_entries()
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['GET'])
 def get_single_entry(entry_id):
     """Gets a single entry from the user"""
 
-    entry = [entry for entry in entries if entry['id'] == entry_id ]
-    if len(entry) == 0:
-        abort(404) 
-
-    return jsonify({'Entry' : entry[0], 'message' : 'Entry retrieved successfully'}), 200
-
+    return theDatabase().get_one_entry(entry_id)
 
 @app.route('/api/v1/entries', methods=['POST'])
 def create_entry():
@@ -61,47 +55,38 @@ def create_entry():
         return jsonify({'message' : 'Title is required'}), 400
     elif not 'description' in request.json:
         return jsonify({'message' : 'Description is required'}), 400
+
+    title = request.json['title']
+    description = request.json['description']
     
-    entry = {
-        "id": entries[-1]['id'] + 1,
-        "title": request.json['title'],
-        "description": request.json['description']
+    entry_data = {
+        'title' : title,
+        'description' : description,
     }
 
-    entries.append(entry)
-
-    return jsonify({'Entry' : entry, 'message' : 'Entry created successfully'}), 200
-
+    # theDatabase().create_entry_table()
+    return theDatabase().add_entry(entry_data)
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['PUT'])
 def update_entry(entry_id):
     """Updates a single entry"""
 
-    entry = [entry for entry in entries if entry['id'] == entry_id]
-
-    if not request.json:
-        abort(400)
-    if len(entry) == 0:
-        abort(400)
-    entry[0]['title'] = request.json.get('title', entry[0]['title'])
-    entry[0]['description'] = request.json.get('description', entry[0]['description'])
+    title = request.json['title']
+    description = request.json['description']
     
-    return jsonify({'Entry' : entry[0], 'message': 'Entry updated successfully'})
+    entry_data = {
+        'title' : title,
+        'description' : description,
+    }
 
+    return theDatabase().update_entry(entry_id, entry_data)
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['DELETE'])
 def delete_entry(entry_id):
     """Deletes a single entry"""
+
+    return theDatabase().delete_entry(entry_id)
     
-    entry = [entry for entry in entries if entry['id'] == entry_id]
-
-    if len(entry) == 0:
-        abort(400)
-    entries.remove(entry[0])
-
-    return jsonify({'message' : 'Entry deleted successfully'})
-
-
 @app.route('/auth/signup', methods=['POST'])
 def signup():
     """Creates a user"""
@@ -127,7 +112,7 @@ def signup():
     }
 
     
-    # theDatabase().create_table()
+    # theDatabase().create_user_table()
     return theDatabase().signup(user_data)
 
 
