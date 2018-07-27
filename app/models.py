@@ -1,6 +1,18 @@
-from flask import jsonify, request
+from flask import Flask, jsonify, request
 import psycopg2
+from flask_bcrypt import Bcrypt
 from pprint import pprint
+from flask_jwt_extended import (
+    JWTManager, create_access_token)
+
+
+app = Flask(__name__)
+
+app.config['JWT_SECRET_KEY'] = 'yoursecretsaresafewithme'
+jwt = JWTManager(app)
+
+bcrypt = Bcrypt(app)
+
 
 class theDatabase(object):
 
@@ -15,7 +27,7 @@ class theDatabase(object):
         self.cursor.execute("""CREATE TABLE diary_users(user_id serial PRIMARY KEY, 
                             username varchar(30) NOT NULL,
                             email varchar(30) NOT NULL,
-                            password varchar(50) NOT NULL)""")
+                            password varchar(150) NOT NULL)""")
         self.conn.commit()
 
     def create_entry_table(self):
@@ -47,12 +59,13 @@ class theDatabase(object):
         password = (credentials['password'])
         username = (credentials['username'])
 
-        self.cursor.execute("""SELECT username FROM diary_users WHERE username = %s""", (username, ))
-        data = self.cursor.fetchall()
-        if data:
-            self.cursor.execute("""SELECT password FROM diary_users WHERE password = %s""", (password, ))
-            self.cursor.fetchall()
-            return jsonify({'message':'Login successful'})
+        self.cursor.execute("""SELECT password FROM diary_users WHERE username = %s""", (username, ))
+        data = self.cursor.fetchone()
+        # return jsonify(password)
+        if bcrypt.check_password_hash(data[0], password):
+            access_token = create_access_token(identity=username)
+            return jsonify({'token' : access_token,'message':'Login successful' }), 200
+            # return jsonify({'message':'Login successful'})
         else:
             return jsonify({'message':'Password is invalid'})
 
