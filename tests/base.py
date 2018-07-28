@@ -22,6 +22,7 @@ class BaseTestClass(TestCase):
             'password' : '1234'
         }
 
+
         self.user_no_username = {
             'email' : 'torivega@wawa.com',
             'password' : 'qwerty'
@@ -35,6 +36,18 @@ class BaseTestClass(TestCase):
         self.user_no_password = {
             'username' : 'ramon',
             'email' : 'ramonomondi@gmail.com'
+        }
+
+        self.user_invalid_password = {
+            'username' : 'ramon',
+            'email' : 'ramonomondi@gmail.com',
+            'password' : '1209'
+        }
+
+        self.user_invalid_username = {
+            'username' : 'ramoon',
+            'email' : 'ramonomondi@gmail.com',
+            'password' : '1234'
         }
 
         self.entry_contents = {
@@ -51,6 +64,19 @@ class BaseTestClass(TestCase):
         self.entry_no_description = {
             'title' : 'You are in for a treat'
         }
+
+
+    def signup(self):
+        response =self.client.post('/auth/signup',
+                        data=json.dumps(self.user_details),
+                        headers={'content-type':'application/json'})
+        return response
+
+    def login(self):
+        response = self.client.post('/auth/login',
+                        data=json.dumps(self.user_details),
+                        headers={'content-type':'application/json'})
+        return response                
 
 
     @classmethod
