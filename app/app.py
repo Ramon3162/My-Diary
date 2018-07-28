@@ -12,50 +12,28 @@ jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
 
-#List to hold the Entry data
-
-entries = [
-    {
-        "id": 0,
-        "title": "My Name",
-        "description": "Weep not child for I am with you"
-    },
-    {
-        "id": 1,
-        "title": "His Word",
-        "description": "And His word was made flesh"
-    },
-    {
-        "id": 2,
-        "title": "The World",
-        "description": "No matter what happens, keep moving forward"
-    }
-]
-
-users = [
-    {
-        "id": 1,
-        "username": "ramon",
-        "email": "ramonomondi@gmail.com",
-        "password": "1234"
-    }
-]
-
 @app.route('/api/v1/entries', methods=['GET'])
 @jwt_required
 
 def get_all_entries():
     """Gets all the entries by the user"""
+    
     # current_user = get_jwt_identity()
+
+    theDatabase().create_entry_table()
     return theDatabase().get_all_entries()
+
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['GET'])
 @jwt_required
 
-def get_single_entry(current_user, entry_id):
+def get_single_entry(entry_id):
     """Gets a single entry from the user"""
+    # current_user = get_jwt_identity()
 
+    theDatabase().create_entry_table()
     return theDatabase().get_one_entry(entry_id)
+
 
 @app.route('/api/v1/entries', methods=['POST'])
 @jwt_required
@@ -63,6 +41,7 @@ def get_single_entry(current_user, entry_id):
 def create_entry():
     """Creates a single entry"""
     
+    # current_user = get_jwt_identity()
     if not request.json:
         abort(400)
     elif not 'title' in request.json:
@@ -75,10 +54,10 @@ def create_entry():
     
     entry_data = {
         'title' : title,
-        'description' : description,
+        'description' : description
     }
 
-    # theDatabase().create_entry_table()
+    theDatabase().create_entry_table()
     return theDatabase().add_entry(entry_data)
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['PUT'])
@@ -87,14 +66,16 @@ def create_entry():
 def update_entry(entry_id):
     """Updates a single entry"""
 
+    # current_user = get_jwt_identity()
     title = request.json['title']
     description = request.json['description']
     
     entry_data = {
         'title' : title,
-        'description' : description,
+        'description' : description
     }
 
+    theDatabase().create_entry_table()
     return theDatabase().update_entry(entry_id, entry_data)
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['DELETE'])
@@ -103,6 +84,9 @@ def update_entry(entry_id):
 def delete_entry(entry_id):
     """Deletes a single entry"""
 
+    # current_user = get_jwt_identity()
+    
+    theDatabase().create_entry_table()
     return theDatabase().delete_entry(entry_id)
     
 @app.route('/auth/signup', methods=['POST'])
@@ -131,7 +115,7 @@ def signup():
     }
 
     
-    # theDatabase().create_user_table()
+    theDatabase().create_user_table()
     return theDatabase().signup(user_data)
 
 
@@ -148,6 +132,7 @@ def login():
 
     username = request.json['username']
     password = request.json['password']
-        
+
+    theDatabase().create_user_table()   
     return theDatabase().login(password, username)
    
