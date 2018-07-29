@@ -83,7 +83,7 @@ class BaseTestClass(TestCase):
 
 
     @classmethod
-    def classTearDown(self):
+    def classTearDown(cls):
         theDatabase().drop_user_table()
         theDatabase().drop_entry_table()
 
