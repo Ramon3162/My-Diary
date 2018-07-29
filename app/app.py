@@ -2,9 +2,13 @@ from flask import Flask, jsonify, abort, request
 from flask_jwt_extended import get_jwt_identity, jwt_required, JWTManager
 from flask_bcrypt import Bcrypt
 from app.models import theDatabase
+from instance.config import app_config
 
+    
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_object(app_config['development'])
+app.config.from_pyfile('config.py')
 
-app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'yoursecretsaresafewithme'
 jwt = JWTManager(app)
 
@@ -106,7 +110,7 @@ def signup():
     password = request.json['password']
     email = request.json['email']
     hashed_password = bcrypt.generate_password_hash(password).decode('UTF-8')
-  
+
     
     user_data = {
         'username': username,
@@ -135,4 +139,4 @@ def login():
 
     theDatabase().create_user_table()   
     return theDatabase().login(password, username)
-   
+  
