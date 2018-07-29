@@ -5,6 +5,10 @@ python:
 install:
   - pip install -r requirements.txt
 
+before_script:
+  - psql -c "CREATE DATABASE mydiary;" -U postgres
+  - psql -c "CREATE USER postgres WITH PASSWORD '3162';" -U postgres
+
 script:
   - python -m pytest --cov-report term-missing --cov=app
 
