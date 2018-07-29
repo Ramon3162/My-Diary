@@ -1,6 +1,5 @@
 """Testing for the methods applied to the users"""
 from tests.base import BaseTestClass
-from app import app
 
 import json
 
@@ -11,7 +10,7 @@ class TestUserCase(BaseTestClass):
 
         #correct data format
         response = self.client.post('/auth/signup',
-                                    data=json.dumps({'username':'Jamie', 'email': 'json@gmail.com','password':'1234'}),
+                                    data=json.dumps({'username':'James', 'email': 'json@gmail.com','password':'1234'}),
                                     headers={'content-type':'application/json'})
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.get_data())

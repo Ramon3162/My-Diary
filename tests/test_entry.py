@@ -1,6 +1,5 @@
 """Testing for the methods applied to the entries"""
 from tests.base import BaseTestClass
-from app import app
 
 import json
 
@@ -13,6 +12,7 @@ class TestEntryCase(BaseTestClass):
         """Test for posting an entry"""
 
         # Correct entry data format
+        self.signup()
         login = self.login()
         token = json.loads(login.data.decode("UTF-8"))['token']
         response = self.client.post('/api/v1/entries',
@@ -23,7 +23,10 @@ class TestEntryCase(BaseTestClass):
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry created successfully')
 
+
+    def test_post_entry_no_title(self):
         # No title
+        self.signup()
         login = self.login()
         token = json.loads(login.data.decode("UTF-8"))['token']
         response = self.client.post('/api/v1/entries',
@@ -34,7 +37,10 @@ class TestEntryCase(BaseTestClass):
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Title is required')
 
+
+    def test_post_entry_no_description(self):
         # No description
+        self.signup()
         login = self.login()
         token = json.loads(login.data.decode("UTF-8"))['token']
         response = self.client.post('/api/v1/entries',
@@ -50,8 +56,13 @@ class TestEntryCase(BaseTestClass):
     def test_get_all_entries(self):
         """Test for viewing all user entries"""
 
+        self.signup()
         login = self.login()
         token = json.loads(login.data.decode("UTF-8"))['token']
+        self.client.post('/api/v1/entries',
+                            data=json.dumps(self.entry_contents),
+                            content_type='application/json',
+                            headers={"Authorization":"Bearer {}".format(token)} )
         response = self.client.get('/api/v1/entries',
                                     data=json.dumps(self.entry_contents),
                                     content_type='application/json',
@@ -64,8 +75,13 @@ class TestEntryCase(BaseTestClass):
     def test_get_single_entry(self):
         """Test for viewing a single entry"""
 
+        self.signup()
         login = self.login()
         token = json.loads(login.data.decode("UTF-8"))['token']
+        self.client.post('/api/v1/entries',
+                            data=json.dumps(self.entry_contents),
+                            content_type='application/json',
+                            headers={"Authorization":"Bearer {}".format(token)} )
         response = self.client.get('/api/v1/entries/1',
                                     data=json.dumps(self.entry_contents),
                                     content_type='application/json',
@@ -78,6 +94,7 @@ class TestEntryCase(BaseTestClass):
     def test_update_entry(self):
         """Test for updating an entry"""
 
+        self.signup()
         login = self.login()
         token = json.loads(login.data.decode("UTF-8"))['token']
         self.client.post('/api/v1/entries',
@@ -96,13 +113,14 @@ class TestEntryCase(BaseTestClass):
     def test_delete_entry(self):
         """Test for deleting an entry"""
 
+        self.signup()
         login = self.login()
         token = json.loads(login.data.decode("UTF-8"))['token']
         self.client.post('/api/v1/entries',
                             data=json.dumps(self.entry_contents),
                             content_type='application/json',
                             headers={"Authorization":"Bearer {}".format(token)} )
-        response = self.client.delete('/api/v1/entries/1',
+        response = self.client.delete('/api/v1/entries/0',
                                     content_type='application/json',
                                     headers={"Authorization":"Bearer {}".format(token)} )
         self.assertEqual(response.status_code, 200)

@@ -1,13 +1,14 @@
 from flask import Flask, jsonify, request
 import psycopg2
 from flask_bcrypt import Bcrypt
-from pprint import pprint
 from flask_jwt_extended import (
     JWTManager, create_access_token)
 from datetime import timedelta
+from instance.config import app_config
 
-
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_object(app_config['development'])
+app.config.from_pyfile('config.py')
 
 app.config['JWT_SECRET_KEY'] = 'yoursecretsaresafewithme'
 jwt = JWTManager(app)
@@ -36,6 +37,13 @@ class theDatabase(object):
                             description varchar(300) NOT NULL)""")
         self.conn.commit()
 
+    def drop_entry_table(self):
+        self.cursor.execute("""DROP TABLE diary_entries""")
+        self.conn.commit()
+    
+    def drop_user_table(self):
+        self.cursor.execute("""DROP TABLE diary_users""")
+        self.conn.commit()
 
     def signup(self, user_data):
         """Create a new user in the database"""
