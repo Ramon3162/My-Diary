@@ -3,6 +3,8 @@ import unittest
 import json
 from unittest import TestCase
 from app.app import app
+from app.models import theDatabase
+from instance.config import app_config
 
 
 class BaseTestClass(TestCase):
@@ -15,6 +17,7 @@ class BaseTestClass(TestCase):
         
         self.app = app
         self.client = app.test_client()
+        app.config.from_object(app_config['testing'])
 
         self.user_details = {
             'username' : 'ramon',
@@ -76,12 +79,13 @@ class BaseTestClass(TestCase):
         response = self.client.post('/auth/login',
                         data=json.dumps(self.user_details),
                         headers={'content-type':'application/json'})
-        return response                
+        return response             
 
 
     @classmethod
-    def classTearDown(cls):
-        pass
+    def classTearDown(self):
+        theDatabase().drop_user_table()
+        theDatabase().drop_entry_table()
 
 
 if __name__ == '__main__':
