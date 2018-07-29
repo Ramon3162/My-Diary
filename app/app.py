@@ -16,82 +16,74 @@ jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
 
-@app.route('/api/v1/entries', methods=['GET'])
+@app.route('/api/v1/entries', methods=['GET', 'POST'])
 @jwt_required
 
-def get_all_entries():
-    """Gets all the entries by the user"""
-    
-    # current_user = get_jwt_identity()
-
-    theDatabase().create_entry_table()
-    return theDatabase().get_all_entries()
+def entries():
+    if request.method == 'GET':
+                
+        """Gets all the entries by the user"""
+        
 
 
-@app.route('/api/v1/entries/<int:entry_id>', methods=['GET'])
+        theDatabase().create_entry_table()
+        return theDatabase().get_all_entries()
+
+    else:
+        #POST
+        """Creates a single entry"""
+        
+        if not request.json:
+            abort(400)
+        elif not 'title' in request.json:
+            return jsonify({'message' : 'Title is required'}), 400
+        elif not 'description' in request.json:
+            return jsonify({'message' : 'Description is required'}), 400
+
+        title = request.json['title']
+        description = request.json['description']
+        
+        entry_data = {
+            'title' : title,
+            'description' : description
+        }
+
+        theDatabase().create_entry_table()
+        return theDatabase().add_entry(entry_data)
+
+@app.route('/api/v1/entries/<int:entry_id>', methods=['GET', 'PUT', 'DELETE'])
 @jwt_required
 
-def get_single_entry(entry_id):
-    """Gets a single entry from the user"""
-    # current_user = get_jwt_identity()
+def manipulate_entries(entry_id):
 
-    theDatabase().create_entry_table()
-    return theDatabase().get_one_entry(entry_id)
-
-
-@app.route('/api/v1/entries', methods=['POST'])
-@jwt_required
-
-def create_entry():
-    """Creates a single entry"""
+    if request.method == 'GET':
     
-    # current_user = get_jwt_identity()
-    if not request.json:
-        abort(400)
-    elif not 'title' in request.json:
-        return jsonify({'message' : 'Title is required'}), 400
-    elif not 'description' in request.json:
-        return jsonify({'message' : 'Description is required'}), 400
+        """Gets a single entry from the user"""
 
-    title = request.json['title']
-    description = request.json['description']
-    
-    entry_data = {
-        'title' : title,
-        'description' : description
-    }
+        theDatabase().create_entry_table()
+        return theDatabase().get_one_entry(entry_id)
 
-    theDatabase().create_entry_table()
-    return theDatabase().add_entry(entry_data)
+    elif request.method == 'PUT':
 
-@app.route('/api/v1/entries/<int:entry_id>', methods=['PUT'])
-@jwt_required
+        """Updates a single entry"""
 
-def update_entry(entry_id):
-    """Updates a single entry"""
+        title = request.json['title']
+        description = request.json['description']
+        
+        entry_data = {
+            'title' : title,
+            'description' : description
+        }
 
-    # current_user = get_jwt_identity()
-    title = request.json['title']
-    description = request.json['description']
-    
-    entry_data = {
-        'title' : title,
-        'description' : description
-    }
+        theDatabase().create_entry_table()
+        return theDatabase().update_entry(entry_id, entry_data)
 
-    theDatabase().create_entry_table()
-    return theDatabase().update_entry(entry_id, entry_data)
-
-@app.route('/api/v1/entries/<int:entry_id>', methods=['DELETE'])
-@jwt_required
-
-def delete_entry(entry_id):
-    """Deletes a single entry"""
-
-    # current_user = get_jwt_identity()
-    
-    theDatabase().create_entry_table()
-    return theDatabase().delete_entry(entry_id)
+    else:
+        # DELETE
+        """Deletes a single entry"""
+        
+        theDatabase().create_entry_table()
+        return theDatabase().delete_entry(entry_id)
     
 @app.route('/auth/signup', methods=['POST'])
 def signup():
