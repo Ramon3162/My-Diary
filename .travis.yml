@@ -9,8 +9,7 @@ service:
   - postgresql
 
 before_script:
-  - psql -c "CREATE DATABASE mydiary;" -U postgres
-  - psql -c "CREATE USER postgres WITH PASSWORD '3162';" -U postgres
+  - createdb mydiary;
 
 script:
   - python -m pytest --cov-report term-missing --cov=app
