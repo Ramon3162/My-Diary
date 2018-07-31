@@ -1,12 +1,12 @@
-from flask import Flask, jsonify, abort, request
-from flask_jwt_extended import get_jwt_identity, jwt_required, JWTManager
-from flask_bcrypt import Bcrypt
-from app.models import Database
+"""API routes"""
 import re
 import os
+from flask import Flask, jsonify, abort, request
+from flask_jwt_extended import jwt_required, JWTManager
+from flask_bcrypt import Bcrypt
+from app.models import Database
 from instance.config import app_config
 
-    
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(app_config[os.getenv('APP_SETTINGS')])
 app.config.from_pyfile('config.py')
@@ -14,40 +14,29 @@ app.config.from_pyfile('config.py')
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET')
 jwt = JWTManager(app)
 
-
 bcrypt = Bcrypt(app)
-
 
 @app.route('/api/v1/entries', methods=['GET', 'POST'])
 @jwt_required
 
 def entries():
+    """Method that handles posting an entry/retreiving of entries"""
     if request.method == 'GET':
-                
-        """Gets all the entries by the user"""
-        
         Database().create_entry_table()
         return Database().get_all_entries()
-
     else:
-        #POST
-        """Creates a single entry"""
-        
         if not request.json:
             abort(400)
         elif not 'title' in request.json:
             return jsonify({'message' : 'Title is required'}), 400
         elif not 'description' in request.json:
             return jsonify({'message' : 'Description is required'}), 400
-
         title = request.json['title']
         description = request.json['description']
-        
         entry_data = {
             'title' : title,
             'description' : description
-        }
-
+            }
         Database().create_entry_table()
         return Database().add_entry(entry_data)
 
@@ -55,21 +44,16 @@ def entries():
 @jwt_required
 
 def manipulate_entries(entry_id):
-
-    if request.method == 'GET':
-    
-        """Gets a single entry from the user"""
-
+    """Handling of specific entries"""
+    if not isinstance(entry_id, int):
+        return jsonify({'message' : 'Entry id should be a number'}), 404
+    elif request.method == 'GET':
         Database().create_entry_table()
         return Database().get_one_entry(entry_id)
 
     elif request.method == 'PUT':
-
-        """Updates a single entry"""
-
         title = request.json['title']
         description = request.json['description']
-        
         entry_data = {
             'title' : title,
             'description' : description
@@ -79,64 +63,53 @@ def manipulate_entries(entry_id):
         return Database().update_entry(entry_id, entry_data)
 
     else:
-        # DELETE
-        """Deletes a single entry"""
-        
         Database().create_entry_table()
         return Database().delete_entry(entry_id)
-    
+
 @app.route('/auth/signup', methods=['POST'])
 def signup():
     """Creates a user"""
     if not request.json:
-        abort(400)
+        return({'message' : 'Reaquest should be in json format'}), 400
     elif not 'username' in request.json:
         return jsonify({'message' : 'Username is required'}), 400
     elif not 'email' in request.json:
         return jsonify({'message' : 'Email is required'}), 400
     elif not 'password' in request.json:
         return jsonify({'message' : 'Password is required'}), 401
-    else:
-        username = request.json['username']
-        password = request.json['password']
-        email = request.json['email']
-        hashed_password = bcrypt.generate_password_hash(password).decode('UTF-8')
+    username = request.json['username']
+    password = request.json['password']
+    email = request.json['email']
+    hashed_password = bcrypt.generate_password_hash(password).decode('UTF-8')
 
-        valid_email = re.compile(r"(^[a-zA-Z0-9_.-]+@[a-zA-Z-]+\.[.a-zA-Z-]+$)")
-        valid_username = re.compile(r"(^[a-zA-Z0-9_.-]+$)")
-        
-        if not re.match(valid_username, username):
-            return jsonify({'message' : 'Username should not have any special characters.'}), 400
-        elif len(username) < 3:
-            return jsonify({'message' : 'Username should be at least three characters long.'}), 400
-        elif len(password) < 8:
-            return jsonify({'message' : 'Password should be at least eight characters long.'}), 400
-        elif not re.match(valid_email, email):
-            return jsonify({'message' : 'Invalid email format.'}), 400
-        else:
-            user_data = {
-                'username': username,
-                'password': hashed_password,
-                'email': email,         
-            }
-
-        
-        Database().create_user_table()
-        return Database().signup(user_data)
+    valid_email = re.compile(r"(^[a-zA-Z0-9_.-]+@[a-zA-Z-]+\.[.a-zA-Z-]+$)")
+    valid_username = re.compile(r"(^[a-zA-Z0-9_.-]+$)")
+    if not re.match(valid_username, username):
+        return jsonify({'message' : 'Username should not have any special characters.'}), 400
+    elif len(username) < 3:
+        return jsonify({'message' : 'Username should be at least three characters long.'}), 400
+    elif len(password) < 8:
+        return jsonify({'message' : 'Password should be at least eight characters long.'}), 400
+    elif not re.match(valid_email, email):
+        return jsonify({'message' : 'Invalid email format.'}), 400
+    user_data = {
+        'username': username,
+        'password': hashed_password,
+        'email': email,
+        }
+    Database().create_user_table()
+    return Database().signup(user_data)
 
 @app.route('/auth/login', methods=['POST'])
 def login():
     """Logs a user into the system"""
-    
     if not request.json:
         abort(400)
     elif not 'username' in request.json:
         return jsonify({'message' : 'Username is required'}), 400
     elif not 'password' in request.json:
         return jsonify({'message' : 'Password is required'}), 401
-
     username = request.json['username']
     password = request.json['password']
-
-    Database().create_user_table()   
+    Database().create_user_table()
     return Database().login(password, username)
