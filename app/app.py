@@ -1,15 +1,17 @@
 from flask import Flask, jsonify, abort, request
 from flask_jwt_extended import get_jwt_identity, jwt_required, JWTManager
 from flask_bcrypt import Bcrypt
-from app.models import theDatabase
+from app.models import Database
+import re
+import os
 from instance.config import app_config
 
     
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_object(app_config['development'])
+app.config.from_object(app_config[os.getenv('APP_SETTINGS')])
 app.config.from_pyfile('config.py')
 
-app.config['JWT_SECRET_KEY'] = 'yoursecretsaresafewithme'
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET')
 jwt = JWTManager(app)
 
 
@@ -24,10 +26,8 @@ def entries():
                 
         """Gets all the entries by the user"""
         
-
-
-        theDatabase().create_entry_table()
-        return theDatabase().get_all_entries()
+        Database().create_entry_table()
+        return Database().get_all_entries()
 
     else:
         #POST
@@ -48,8 +48,8 @@ def entries():
             'description' : description
         }
 
-        theDatabase().create_entry_table()
-        return theDatabase().add_entry(entry_data)
+        Database().create_entry_table()
+        return Database().add_entry(entry_data)
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['GET', 'PUT', 'DELETE'])
 @jwt_required
@@ -60,8 +60,8 @@ def manipulate_entries(entry_id):
     
         """Gets a single entry from the user"""
 
-        theDatabase().create_entry_table()
-        return theDatabase().get_one_entry(entry_id)
+        Database().create_entry_table()
+        return Database().get_one_entry(entry_id)
 
     elif request.method == 'PUT':
 
@@ -75,20 +75,19 @@ def manipulate_entries(entry_id):
             'description' : description
         }
 
-        theDatabase().create_entry_table()
-        return theDatabase().update_entry(entry_id, entry_data)
+        Database().create_entry_table()
+        return Database().update_entry(entry_id, entry_data)
 
     else:
         # DELETE
         """Deletes a single entry"""
         
-        theDatabase().create_entry_table()
-        return theDatabase().delete_entry(entry_id)
+        Database().create_entry_table()
+        return Database().delete_entry(entry_id)
     
 @app.route('/auth/signup', methods=['POST'])
 def signup():
     """Creates a user"""
-
     if not request.json:
         abort(400)
     elif not 'username' in request.json:
@@ -97,23 +96,33 @@ def signup():
         return jsonify({'message' : 'Email is required'}), 400
     elif not 'password' in request.json:
         return jsonify({'message' : 'Password is required'}), 401
+    else:
+        username = request.json['username']
+        password = request.json['password']
+        email = request.json['email']
+        hashed_password = bcrypt.generate_password_hash(password).decode('UTF-8')
 
-    username = request.json['username']
-    password = request.json['password']
-    email = request.json['email']
-    hashed_password = bcrypt.generate_password_hash(password).decode('UTF-8')
+        valid_email = re.compile(r"(^[a-zA-Z0-9_.-]+@[a-zA-Z-]+\.[.a-zA-Z-]+$)")
+        valid_username = re.compile(r"(^[a-zA-Z0-9_.-]+$)")
+        
+        if not re.match(valid_username, username):
+            return jsonify({'message' : 'Username should not have any special characters.'}), 400
+        elif len(username) < 3:
+            return jsonify({'message' : 'Username should be at least three characters long.'}), 400
+        elif len(password) < 8:
+            return jsonify({'message' : 'Password should be at least eight characters long.'}), 400
+        elif not re.match(valid_email, email):
+            return jsonify({'message' : 'Invalid email format.'}), 400
+        else:
+            user_data = {
+                'username': username,
+                'password': hashed_password,
+                'email': email,         
+            }
 
-    
-    user_data = {
-        'username': username,
-        'password': hashed_password,
-        'email': email,         
-    }
-
-    
-    theDatabase().create_user_table()
-    return theDatabase().signup(user_data)
-
+        
+        Database().create_user_table()
+        return Database().signup(user_data)
 
 @app.route('/auth/login', methods=['POST'])
 def login():
@@ -129,6 +138,5 @@ def login():
     username = request.json['username']
     password = request.json['password']
 
-    theDatabase().create_user_table()   
-    return theDatabase().login(password, username)
-  
+    Database().create_user_table()   
+    return Database().login(password, username)
