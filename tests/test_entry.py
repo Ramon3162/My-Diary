@@ -12,8 +12,8 @@ class TestEntryCase(BaseTestClass):
         """Test for posting an entry"""
 
         # Correct entry data format
-        self.signup()
-        login = self.login()
+        self.signup_user()
+        login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
         response = self.client.post('/api/v1/entries',
                                     data=json.dumps(self.entry_contents),
@@ -26,8 +26,8 @@ class TestEntryCase(BaseTestClass):
 
     def test_post_entry_no_title(self):
         # No title
-        self.signup()
-        login = self.login()
+        self.signup_user()
+        login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
         response = self.client.post('/api/v1/entries',
                                     data=json.dumps(self.entry_no_title),
@@ -40,8 +40,8 @@ class TestEntryCase(BaseTestClass):
 
     def test_post_entry_no_description(self):
         # No description
-        self.signup()
-        login = self.login()
+        self.signup_user()
+        login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
         response = self.client.post('/api/v1/entries',
                                     data=json.dumps(self.entry_no_description),
@@ -56,8 +56,8 @@ class TestEntryCase(BaseTestClass):
     def test_get_all_entries(self):
         """Test for viewing all user entries"""
 
-        self.signup()
-        login = self.login()
+        self.signup_user()
+        login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
         self.client.post('/api/v1/entries',
                             data=json.dumps(self.entry_contents),
@@ -75,8 +75,8 @@ class TestEntryCase(BaseTestClass):
     def test_get_single_entry(self):
         """Test for viewing a single entry"""
 
-        self.signup()
-        login = self.login()
+        self.signup_user()
+        login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
         self.client.post('/api/v1/entries',
                             data=json.dumps(self.entry_contents),
@@ -94,8 +94,8 @@ class TestEntryCase(BaseTestClass):
     def test_update_entry(self):
         """Test for updating an entry"""
 
-        self.signup()
-        login = self.login()
+        self.signup_user()
+        login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
         self.client.post('/api/v1/entries',
                             data=json.dumps(self.entry_contents),
@@ -113,16 +113,34 @@ class TestEntryCase(BaseTestClass):
     def test_delete_entry(self):
         """Test for deleting an entry"""
 
-        self.signup()
-        login = self.login()
+        self.signup_user()
+        login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
         self.client.post('/api/v1/entries',
                             data=json.dumps(self.entry_contents),
                             content_type='application/json',
                             headers={"Authorization":"Bearer {}".format(token)} )
-        response = self.client.delete('/api/v1/entries/0',
+        response = self.client.delete('/api/v1/entries/1',
                                     content_type='application/json',
                                     headers={"Authorization":"Bearer {}".format(token)} )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry deleted successfully')
+
+    
+    def test_delete_entry_non_existent(self):
+        """Test for deleting an entry"""
+
+        self.signup_user()
+        login = self.login_user()
+        token = json.loads(login.data.decode("UTF-8"))['token']
+        self.client.post('/api/v1/entries',
+                            data=json.dumps(self.entry_contents),
+                            content_type='application/json',
+                            headers={"Authorization":"Bearer {}".format(token)} )
+        response = self.client.delete('/api/v1/entries/5',
+                                    content_type='application/json',
+                                    headers={"Authorization":"Bearer {}".format(token)} )
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], 'Entry not found.')
