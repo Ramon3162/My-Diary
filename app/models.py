@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 import psycopg2
+import os
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import (
     JWTManager, create_access_token)
@@ -7,19 +8,23 @@ from datetime import timedelta
 from instance.config import app_config
 
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_object(app_config['development'])
-app.config.from_pyfile('config.py')
 
-app.config['JWT_SECRET_KEY'] = 'yoursecretsaresafewithme'
+
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET')
 jwt = JWTManager(app)
 
 bcrypt = Bcrypt(app)
 
 
-class theDatabase(object):
+class Database(object):
 
     def __init__(self):
-        self.conn = psycopg2.connect("dbname='mydiary' host='localhost' user='postgres' password='3162' port='5432'")
+        dbname = os.getenv('DB_NAME')
+        user = os.getenv('DB_USER')
+        password = os.getenv('DB_PASSWORD')
+        host = os.getenv('DB_HOST')
+        port = os.getenv('DB_PORT')
+        self.conn = psycopg2.connect(dbname=dbname, user=user, host=host, password=password, port=port)
         self.cursor = self.conn.cursor()
 
     def create_user_table(self):
@@ -28,22 +33,32 @@ class theDatabase(object):
                             username varchar(30) NOT NULL,
                             email varchar(30) NOT NULL,
                             password varchar(150) NOT NULL)""")
+        self.cursor.close()
         self.conn.commit()
+        self.conn.close()
 
     def create_entry_table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS diary_entries(
                             entry_id SERIAL,
                             entry_title varchar(50) NOT NULL,
-                            description varchar(300) NOT NULL)""")
+                            description varchar(300) NOT NULL);""")
+        self.cursor.close()
         self.conn.commit()
+        self.conn.close()
+
 
     def drop_entry_table(self):
-        self.cursor.execute("""DROP TABLE diary_entries""")
+        self.cursor.execute("""DROP TABLE IF EXISTS diary_entries""")
+        self.cursor.close()
         self.conn.commit()
+        self.conn.close()
+
     
     def drop_user_table(self):
-        self.cursor.execute("""DROP TABLE diary_users""")
+        self.cursor.execute("""DROP TABLE IF EXISTS diary_users""")
+        self.cursor.close()
         self.conn.commit()
+        self.conn.close()
 
     def signup(self, user_data):
         """Create a new user in the database"""
@@ -124,7 +139,13 @@ class theDatabase(object):
     def delete_entry(self, entry_id):
         """Allows for the deletion of one diary entry"""
 
-        self.cursor.execute("""DELETE FROM diary_entries WHERE entry_id = %s""", (entry_id,))
-        self.conn.commit()
-        return jsonify({'message' : 'Entry deleted successfully'})
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s""", (entry_id, ))
+        data = self.cursor.fetchall()
+        if data:
+            self.cursor.execute("""DELETE FROM diary_entries WHERE entry_id = %s""", (entry_id,))
+            self.conn.commit()
+            return jsonify({'message' : 'Entry deleted successfully'}), 204
+        else:
+            return jsonify({'message' : 'Entry not found.'}), 400
+
             
