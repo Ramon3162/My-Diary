@@ -45,26 +45,28 @@ def entries():
 
 def manipulate_entries(entry_id):
     """Handling of specific entries"""
-    if not isinstance(entry_id, int):
+    if request.method == 'GET':
+        if isinstance(entry_id, int):
+            Database().create_entry_table()
+            return Database().get_one_entry(entry_id)
         return jsonify({'message' : 'Entry id should be a number'}), 404
-    elif request.method == 'GET':
-        Database().create_entry_table()
-        return Database().get_one_entry(entry_id)
-
     elif request.method == 'PUT':
-        title = request.json['title']
-        description = request.json['description']
-        entry_data = {
-            'title' : title,
-            'description' : description
-        }
-
-        Database().create_entry_table()
-        return Database().update_entry(entry_id, entry_data)
+        if isinstance(entry_id, int):
+            title = request.json['title']
+            description = request.json['description']
+            entry_data = {
+                'title' : title,
+                'description' : description
+            }
+            Database().create_entry_table()
+            return Database().update_entry(entry_id, entry_data)
+        return jsonify({'message' : 'Entry id should be a number'}), 404
 
     else:
-        Database().create_entry_table()
-        return Database().delete_entry(entry_id)
+        if isinstance(entry_id, int):
+            Database().create_entry_table()
+            return Database().delete_entry(entry_id)
+        return jsonify({'message' : 'Entry id should be a number'}), 404
 
 @app.route('/auth/signup', methods=['POST'])
 def signup():
