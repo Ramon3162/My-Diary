@@ -1,6 +1,6 @@
 """Creating the base class for all the other tests"""
-import unittest
 import json
+import unittest
 from unittest import TestCase
 from app.app import app
 from app.models import Database
@@ -10,12 +10,10 @@ from instance.config import app_config
 class BaseTestClass(TestCase):
     """Configuring the base test class for all the test cases"""
 
-    @classmethod
     def setUp(self):
         """App configuration setup"""
-        
         self.app = app.config.from_object(app_config['testing'])
-        self.client = app.test_client()        
+        self.client = app.test_client()
 
         self.user_details = {
             'username' : 'ramonomondi',
@@ -66,17 +64,19 @@ class BaseTestClass(TestCase):
         }
 
     def signup_user(self):
-        response =self.client.post('/auth/signup',
-                        data=json.dumps(self.user_details),
-                        headers={'content-type':'application/json'})
+        """Method to register a user"""
+        response = self.client.post('/auth/signup',
+                                    data=json.dumps(self.user_details),
+                                    headers={'content-type':'application/json'})
         return response
 
     def login_user(self):
+        """Method to log in a user"""
         response = self.client.post('/auth/login',
-                        data=json.dumps(self.user_details),
-                        headers={'content-type':'application/json'})
-        return response             
- 
+                                    data=json.dumps(self.user_details),
+                                    headers={'content-type':'application/json'})
+        return response
+
     def tearDown(self):
         Database().drop_user_table()
         Database().drop_entry_table()
