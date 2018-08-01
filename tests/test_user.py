@@ -37,7 +37,6 @@ class TestUserCase(BaseTestClass):
                                         'email': 'jsongmail.com',
                                         'password':'88881234'}),
                                     headers={'content-type':'application/json'})
-        print(response.data)
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Invalid email format.')
@@ -50,7 +49,6 @@ class TestUserCase(BaseTestClass):
                                         'email': 'json@gmail.com',
                                         'password':'88881234'}),
                                     headers={'content-type':'application/json'})
-        print(response.data)
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Username should be at least three characters long.')
@@ -63,7 +61,6 @@ class TestUserCase(BaseTestClass):
                                         'email': 'json@gmail.com',
                                         'password':'1234'}),
                                     headers={'content-type':'application/json'})
-        print(response.data)
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Password should be at least eight characters long.')
