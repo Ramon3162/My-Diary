@@ -103,7 +103,9 @@ class Database:
         self.cursor.execute("""INSERT INTO diary_entries (entry_title, description)
                             VALUES (%(title)s, %(description)s)""", entry_data)
         self.conn.commit()
-        return jsonify({'message' : 'Entry created successfully'}), 200
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = (SELECT MAX(entry_id) FROM diary_entries)""")
+        data = self.cursor.fetchall()
+        return jsonify({'Entry': data, 'message' : 'Entry created successfully'}), 200
 
     def get_one_entry(self, entry_id):
         """Allows for viewing of one diary entry"""
