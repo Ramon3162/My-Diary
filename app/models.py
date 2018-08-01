@@ -78,7 +78,9 @@ class Database:
             self.cursor.execute("""INSERT INTO diary_users (username, password, email)
                                 VALUES (%(username)s, %(password)s, %(email)s)""", user_data)
             self.conn.commit()
-            return jsonify({'message' : 'User created successfully'}), 201
+            self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
+            data = self.cursor.fetchall()
+            return jsonify({'User' : data, 'message' : 'User created successfully'}), 201
         return jsonify({'message' : 'Username already exists'}), 400
     def login(self, username, password):
 
