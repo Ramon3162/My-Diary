@@ -42,6 +42,7 @@ After setting up the above, run.
 
 ```python run.py```
 
+- Documentation on how the API endpoinst work can be found [here](https://mydiary9.docs.apiary.io/#)
 ## API endpoints
 
 Test | API-endpoint | HTTP-Verb
