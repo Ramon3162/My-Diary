@@ -1,7 +1,7 @@
 """API routes"""
 import re
 import os
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, render_template
 from flask_jwt_extended import jwt_required, JWTManager
 from flask_bcrypt import Bcrypt
 from app.models import Database
@@ -15,6 +15,10 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET')
 jwt = JWTManager(app)
 
 bcrypt = Bcrypt(app)
+
+@app.route("/")
+def index():
+    return render_template("documentation.html")
 
 @app.route('/api/v1/entries', methods=['GET', 'POST'])
 @jwt_required
