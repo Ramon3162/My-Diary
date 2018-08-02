@@ -111,6 +111,10 @@ class Database:
 
     def add_entry(self, current_user, title, description):
         """Adds new entry to tha database"""
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND description = %s AND entry_title = %s""", (current_user, description, title, ))
+        result = self.cursor.fetchall()
+        if result:
+            return jsonify({'message' : 'You cannot publish a duplicate entry.'}), 400
         self.cursor.execute("""INSERT INTO diary_entries (id, entry_title, description)
                             VALUES (%s, %s, %s)""", (current_user, title, description, ))
         self.conn.commit()
