@@ -147,6 +147,6 @@ class Database:
         if data:
             self.cursor.execute("""DELETE FROM diary_entries WHERE entry_id = %s""", (entry_id,))
             self.conn.commit()
-            return jsonify({'message' : 'Entry deleted successfully'}), 204
+            return jsonify({'message' : 'Entry deleted successfully'}), 200
         return jsonify({'message' : 'Entry not found.'}), 400
             
