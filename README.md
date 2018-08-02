@@ -2,7 +2,7 @@
 
 ## My-Diary
 
-Andela Developer Challenge (Cohort 30)
+Andela Developer Challenge (Cohort 30) 
 
 ## Description
 
