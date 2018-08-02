@@ -57,7 +57,7 @@ class TestEntryCase(BaseTestClass):
                                     headers={"Authorization":"Bearer {}".format(token)})
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
-        self.assertEqual(data['message'], 'Entry description cannot be empty.')
+        self.assertEqual(data['message'], 'Entry title cannot be empty.')
 
     def test_post_entry_empty_description(self):
         """Test posting an entry with only spaces in the title"""
@@ -70,7 +70,7 @@ class TestEntryCase(BaseTestClass):
                                     headers={"Authorization":"Bearer {}".format(token)})
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
-        self.assertEqual(data['message'], 'Entry title cannot be empty.')
+        self.assertEqual(data['message'], 'Entry description cannot be empty.')
 
     def test_get_all_entries(self):
         """Test for viewing all user entries"""
