@@ -63,35 +63,6 @@ class TestEntryCase(BaseTestClass):
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'All entries found successfully')
 
-    def test_entry_id(self):
-        """Test if entry id is a number"""
-        self.signup_user()
-        login = self.login_user()
-        token = json.loads(login.data.decode("UTF-8"))['token']
-        response = self.client.get('/api/v1/entries/u',
-                                   data=json.dumps(self.entry_contents),
-                                   content_type='application/json',
-                                   headers={"Authorization":"Bearer {}".format(token)})
-        self.assertEqual(response.status_code, 404)
-        data = json.loads(response.get_data())
-        self.assertEqual(data['message'], 'Entry id should be a number')
-
-        response1 = self.client.put('/api/v1/entries/u',
-                                    data=json.dumps(self.entry_contents),
-                                    content_type='application/json',
-                                    headers={"Authorization":"Bearer {}".format(token)})
-        self.assertEqual(response1.status_code, 404)
-        data = json.loads(response1.get_data())
-        self.assertEqual(data['message'], 'Entry id should be a number')
-
-        response2 = self.client.delete('/api/v1/entries/u',
-                                       data=json.dumps(self.entry_contents),
-                                       content_type='application/json',
-                                       headers={"Authorization":"Bearer {}".format(token)})
-        self.assertEqual(response2.status_code, 404)
-        data = json.loads(response2.get_data())
-        self.assertEqual(data['message'], 'Entry id should be a number')
-
     def test_get_single_entry(self):
         """Test for viewing a single entry"""
         self.signup_user()
@@ -141,7 +112,7 @@ class TestEntryCase(BaseTestClass):
         response = self.client.delete('/api/v1/entries/1',
                                       content_type='application/json',
                                       headers={"Authorization":"Bearer {}".format(token)})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 200)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry deleted successfully')
 
