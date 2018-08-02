@@ -1,8 +1,9 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/92ae5552eeceac6cd893/maintainability)](https://codeclimate.com/github/Ramon3162/My-Diary/maintainabili[![Build Status](https://travis-ci.org/Ramon3162/My-Diary.svg?branch=develop)](https://travis-ci.org/Ramon3162/My-Diary) [![Coverage Status](https://coveralls.io/repos/github/Ramon3162/My-Diary/badge.svg?branch=develop)](https://coveralls.io/github/Ramon3162/My-Diary?branch=develop)
+[![Maintainability](https://api.codeclimate.com/v1/badges/92ae5552eeceac6cd893/maintainability)](https://codeclimate.com/github/Ramon3162/My-Diary/maintainability)
+[![Build Status](https://travis-ci.org/Ramon3162/My-Diary.svg?branch=develop)](https://travis-ci.org/Ramon3162/My-Diary) [![Coverage Status](https://coveralls.io/repos/github/Ramon3162/My-Diary/badge.svg?branch=develop)](https://coveralls.io/github/Ramon3162/My-Diary?branch=develop)
 
 ## My-Diary
 
-Andela Developer Challenge (Cohort 30) 
+Andela Developer Challenge (Cohort 30)
 
 ## Description
 
