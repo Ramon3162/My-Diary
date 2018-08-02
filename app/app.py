@@ -1,7 +1,7 @@
 """API routes"""
 import re
 import os
-from flask import Flask, jsonify, abort, request, render_template
+from flask import Flask, jsonify, abort, request, render_template, make_response
 from flask_jwt_extended import jwt_required, JWTManager
 from flask_bcrypt import Bcrypt
 from app.models import Database
@@ -50,27 +50,20 @@ def entries():
 def manipulate_entries(entry_id):
     """Handling of specific entries"""
     if request.method == 'GET':
-        if isinstance(entry_id, int):
-            Database().create_entry_table()
-            return Database().get_one_entry(entry_id)
-        return jsonify({'message' : 'Entry id should be a number'}), 404
+        Database().create_entry_table()
+        return Database().get_one_entry(entry_id)
     elif request.method == 'PUT':
-        if isinstance(entry_id, int):
-            title = request.json['title']
-            description = request.json['description']
-            entry_data = {
-                'title' : title,
-                'description' : description
-            }
-            Database().create_entry_table()
-            return Database().update_entry(entry_id, entry_data)
-        return jsonify({'message' : 'Entry id should be a number'}), 404
-
+        title = request.json['title']
+        description = request.json['description']
+        entry_data = {
+            'title' : title,
+            'description' : description
+        }
+        Database().create_entry_table()
+        return Database().update_entry(entry_id, entry_data)
     else:
-        if isinstance(entry_id, int):
-            Database().create_entry_table()
-            return Database().delete_entry(entry_id)
-        return jsonify({'message' : 'Entry id should be a number'}), 404
+        Database().create_entry_table()
+        return Database().delete_entry(entry_id)
 
 @app.route('/auth/signup', methods=['POST'])
 def signup():
@@ -119,3 +112,7 @@ def login():
     password = request.json['password']
     Database().create_user_table()
     return Database().login(password, username)
+
+@app.errorhandler(404)
+def entry_not_found(error):
+    return make_response(jsonify({'Error': 'Invalid input'}), 404)
