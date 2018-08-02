@@ -12,10 +12,10 @@ before_script:
   - createdb mydiary;
 
 script:
-  - python -m pytest --cov-report term-missing --cov=app
-
   - cp .env .env.var
-
+  - source .env.var
+  - python -m pytest --cov-report term-missing --cov=app
+  
 after_success:
   - coveralls
   - codeclimate
