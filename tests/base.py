@@ -18,22 +18,38 @@ class BaseTestClass(TestCase):
         self.user_details = {
             'username' : 'ramonomondi',
             'email' : 'ramonomondi@gmail.com',
+            'password' : '123456789',
+            'confirm_password': '123456789'
+        }
+
+        self.user_login_details = {
+            'username' : 'ramonomondi',
+            'email' : 'ramonomondi@gmail.com',
             'password' : '123456789'
         }
 
         self.user_no_username = {
             'email' : 'torivega@wawa.com',
-            'password' : 'qwerty'
+            'password' : 'qwerty',
+            'confirm_password' : 'qwerty'
         }
 
         self.user_no_email = {
             'username' : 'ramonomondi',
-            'password' : '123456789'
+            'password' : '123456789',
+            'confirm_password' : '123456789'
         }
 
         self.user_no_password = {
             'username' : 'ramonomondi',
-            'email' : 'ramonomondi@gmail.com'
+            'email' : 'ramonomondi@gmail.com',
+            'confirm_password' : '123456789'
+        }
+
+        self.user_no_confirm_password = {
+            'username' : 'ramonomondi',
+            'email' : 'ramonomondi@gmail.com',
+            'password' : '123456789'
         }
 
         self.user_invalid_password = {
@@ -59,8 +75,18 @@ class BaseTestClass(TestCase):
             'description' : 'This is it'
         }
 
+        self.entry_empty_title = {
+            'title': ' ',
+            'description' : 'This is it'
+        }
+
         self.entry_no_description = {
             'title' : 'You are in for a treat'
+        }
+
+        self.entry_empty_description = {
+            'title' : 'You are in for a treat',
+            'description' : ' '
         }
 
     def signup_user(self):
@@ -73,7 +99,7 @@ class BaseTestClass(TestCase):
     def login_user(self):
         """Method to log in a user"""
         response = self.client.post('/auth/login',
-                                    data=json.dumps(self.user_details),
+                                    data=json.dumps(self.user_login_details),
                                     headers={'content-type':'application/json'})
         return response
 

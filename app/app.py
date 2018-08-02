@@ -2,7 +2,7 @@
 import re
 import os
 from flask import Flask, jsonify, abort, request, render_template, make_response
-from flask_jwt_extended import jwt_required, JWTManager
+from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity
 from flask_bcrypt import Bcrypt
 from app.models import Database
 from instance.config import app_config
@@ -17,18 +17,15 @@ jwt = JWTManager(app)
 CORS(app)
 bcrypt = Bcrypt(app)
 
-@app.route("/")
-def index():
-    return render_template("documentation.html")
-
 @app.route('/api/v1/entries', methods=['GET', 'POST'])
 @jwt_required
 
 def entries():
     """Method that handles posting an entry/retreiving of entries"""
+    current_user = get_jwt_identity()[0]
     if request.method == 'GET':
         Database().create_entry_table()
-        return Database().get_all_entries()
+        return Database().get_all_entries(current_user)
     else:
         if not request.json:
             abort(400)
@@ -38,33 +35,30 @@ def entries():
             return jsonify({'message' : 'Description is required'}), 400
         title = request.json['title']
         description = request.json['description']
-        entry_data = {
-            'title' : title,
-            'description' : description
-            }
+        if len(title.strip(" ")) < 1:
+            return jsonify({'message' : 'Entry title cannot be empty.'}), 400
+        elif len(description.strip(" ")) < 1:
+            return jsonify({'message' : 'Entry description cannot be empty.'}),400
         Database().create_entry_table()
-        return Database().add_entry(entry_data)
+        return Database().add_entry(current_user, title, description)
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['GET', 'PUT', 'DELETE'])
 @jwt_required
 
 def manipulate_entries(entry_id):
     """Handling of specific entries"""
+    current_user = get_jwt_identity()[0]
     if request.method == 'GET':
         Database().create_entry_table()
-        return Database().get_one_entry(entry_id)
+        return Database().get_one_entry(entry_id, current_user)
     elif request.method == 'PUT':
         title = request.json['title']
         description = request.json['description']
-        entry_data = {
-            'title' : title,
-            'description' : description
-        }
         Database().create_entry_table()
-        return Database().update_entry(entry_id, entry_data)
+        return Database().update_entry(entry_id, title, description, current_user)
     else:
         Database().create_entry_table()
-        return Database().delete_entry(entry_id)
+        return Database().delete_entry(entry_id, current_user)
 
 @app.route('/auth/signup', methods=['POST'])
 def signup():
@@ -76,10 +70,13 @@ def signup():
     elif not 'email' in request.json:
         return jsonify({'message' : 'Email is required'}), 400
     elif not 'password' in request.json:
-        return jsonify({'message' : 'Password is required'}), 401
+        return jsonify({'message' : 'Password is required'}), 400
+    elif not 'confirm_password' in request.json:
+        return jsonify({'message' : 'Confirm password field is required'}), 400
     username = request.json['username']
     password = request.json['password']
     email = request.json['email']
+    confirm_password = request.json['confirm_password']
     hashed_password = bcrypt.generate_password_hash(password).decode('UTF-8')
 
     valid_email = re.compile(r"(^[a-zA-Z0-9_.-]+@[a-zA-Z-]+\.[.a-zA-Z-]+$)")
@@ -88,6 +85,8 @@ def signup():
         return jsonify({'message' : 'Username should not have any special characters.'}), 400
     elif len(username) < 3:
         return jsonify({'message' : 'Username should be at least three characters long.'}), 400
+    elif password != confirm_password:
+        return jsonify({'message' : 'Passwords provided do not match.'}), 400
     elif len(password) < 8:
         return jsonify({'message' : 'Password should be at least eight characters long.'}), 400
     elif not re.match(valid_email, email):
@@ -117,3 +116,7 @@ def login():
 @app.errorhandler(404)
 def entry_not_found(error):
     return make_response(jsonify({'Error': 'Invalid input'}), 404)
+
+@app.route("/")
+def index():
+    return render_template("documentation.html")
