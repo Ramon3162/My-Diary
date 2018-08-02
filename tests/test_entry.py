@@ -46,6 +46,32 @@ class TestEntryCase(BaseTestClass):
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Description is required')
 
+    def test_post_entry_empty_title(self):
+        """Test posting an entry with only spaces in the title"""
+        self.signup_user()
+        login = self.login_user()
+        token = json.loads(login.data.decode("UTF-8"))['token']
+        response = self.client.post('/api/v1/entries',
+                                    data=json.dumps(self.entry_empty_title),
+                                    content_type='application/json',
+                                    headers={"Authorization":"Bearer {}".format(token)})
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], 'Entry description cannot be empty.')
+
+    def test_post_entry_empty_description(self):
+        """Test posting an entry with only spaces in the title"""
+        self.signup_user()
+        login = self.login_user()
+        token = json.loads(login.data.decode("UTF-8"))['token']
+        response = self.client.post('/api/v1/entries',
+                                    data=json.dumps(self.entry_empty_description),
+                                    content_type='application/json',
+                                    headers={"Authorization":"Bearer {}".format(token)})
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], 'Entry title cannot be empty.')
+
     def test_get_all_entries(self):
         """Test for viewing all user entries"""
         self.signup_user()
