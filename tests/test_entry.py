@@ -72,6 +72,23 @@ class TestEntryCase(BaseTestClass):
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry description cannot be empty.')
 
+    def test_post_duplicate_entry(self):
+        """Test posting an already existing entry"""
+        self.signup_user()
+        login = self.login_user()
+        token = json.loads(login.data.decode("UTF-8"))['token']
+        self.client.post('/api/v1/entries',
+                                data=json.dumps(self.entry_contents),
+                                content_type='application/json',
+                                headers={"Authorization":"Bearer {}".format(token)})
+        response = self.client.post('/api/v1/entries',
+                                    data=json.dumps(self.entry_contents),
+                                    content_type='application/json',
+                                    headers={"Authorization":"Bearer {}".format(token)})
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], 'You cannot publish a duplicate entry.')
+
     def test_get_all_entries(self):
         """Test for viewing all user entries"""
         self.signup_user()
@@ -130,11 +147,10 @@ class TestEntryCase(BaseTestClass):
         self.signup_user()
         login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
-        post = self.client.post('/api/v1/entries',
+        self.client.post('/api/v1/entries',
                          data=json.dumps(self.entry_contents),
                          content_type='application/json',
                          headers={"Authorization":"Bearer {}".format(token)})
-        print(post.json)
         response = self.client.delete('/api/v1/entries/1',
                                       content_type='application/json',
                                       headers={"Authorization":"Bearer {}".format(token)})
