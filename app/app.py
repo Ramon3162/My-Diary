@@ -36,9 +36,9 @@ def entries():
         title = request.json['title']
         description = request.json['description']
         if len(title.strip(" ")) < 1:
-            return jsonify({'message' : 'Entry title cannot be empty.'})
+            return jsonify({'message' : 'Entry title cannot be empty.'}), 400
         elif len(description.strip(" ")) < 1:
-            return jsonify({'message' : 'Entry description cannot be empty.'})
+            return jsonify({'message' : 'Entry description cannot be empty.'}),400
         Database().create_entry_table()
         return Database().add_entry(current_user, title, description)
 
