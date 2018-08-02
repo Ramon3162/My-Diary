@@ -7,12 +7,7 @@ class TestUserCase(BaseTestClass):
 
     def test_signup(self):
         """Testing signup with the correct credentials"""
-        response = self.client.post('/auth/signup',
-                                    data=json.dumps({
-                                        'username':'JamesMwangi',
-                                        'email': 'json@gmail.com',
-                                        'password':'12345678'}),
-                                    headers={'content-type':'application/json'})
+        response = self.signup_user()
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'User created successfully')
@@ -23,7 +18,8 @@ class TestUserCase(BaseTestClass):
                                     data=json.dumps({
                                         'username':'Jam##3',
                                         'email': 'json@gmail.com',
-                                        'password':'128888834'}),
+                                        'password':'128888834',
+                                        'confirm_password':'128888834'}),
                                     headers={'content-type':'application/json'})
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
@@ -35,7 +31,8 @@ class TestUserCase(BaseTestClass):
                                     data=json.dumps({
                                         'username':'JamesMwangi',
                                         'email': 'jsongmail.com',
-                                        'password':'88881234'}),
+                                        'password':'88881234',
+                                        'confirm_password':'88881234'}),
                                     headers={'content-type':'application/json'})
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
@@ -47,7 +44,8 @@ class TestUserCase(BaseTestClass):
                                     data=json.dumps({
                                         'username':'Ja',
                                         'email': 'json@gmail.com',
-                                        'password':'88881234'}),
+                                        'password':'88881234',
+                                        'confirm_password':'88881234'}),
                                     headers={'content-type':'application/json'})
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
@@ -59,7 +57,8 @@ class TestUserCase(BaseTestClass):
                                     data=json.dumps({
                                         'username':'JamesMwangi',
                                         'email': 'json@gmail.com',
-                                        'password':'1234'}),
+                                        'password':'1234',
+                                        'confirm_password':'1234'}),
                                     headers={'content-type':'application/json'})
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
@@ -96,9 +95,18 @@ class TestUserCase(BaseTestClass):
         response = self.client.post('/auth/signup',
                                     data=json.dumps(self.user_no_password),
                                     headers={'content-type':'application/json'})
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Password is required')
+
+    def test_signup_no_confirm_password(self):
+        """Testing signup without confirm password field"""
+        response = self.client.post('/auth/signup',
+                                    data=json.dumps(self.user_no_confirm_password),
+                                    headers={'content-type':'application/json'})
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], 'Confirm password field is required')
 
     def test_login(self):
         """Testing login with the right credentials"""
