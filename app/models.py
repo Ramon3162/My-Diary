@@ -72,15 +72,20 @@ class Database:
         """Create a new user in the database"""
         user = request.get_json()
         username = (user['username'])
+        email = (user['email'])
+        self.cursor.execute("SELECT email FROM diary_users WHERE email = %s", (email, ))
+        email_data = self.cursor.fetchall()
         self.cursor.execute("SELECT username FROM diary_users WHERE username = %s", (username, ))
         username_data = self.cursor.fetchall()
         if not username_data:
-            self.cursor.execute("""INSERT INTO diary_users (username, password, email)
-                                VALUES (%(username)s, %(password)s, %(email)s)""", user_data)
-            self.conn.commit()
-            self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
-            data = self.cursor.fetchall()
-            return jsonify({'User' : data, 'message' : 'User created successfully'}), 201
+            if not email_data:
+                self.cursor.execute("""INSERT INTO diary_users (username, password, email)
+                                    VALUES (%(username)s, %(password)s, %(email)s)""", user_data)
+                self.conn.commit()
+                self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
+                data = self.cursor.fetchall()
+                return jsonify({'User' : data, 'message' : 'User created successfully'}), 201
+            return jsonify({'message' : 'Email already exists'}), 400
         return jsonify({'message' : 'Username already exists'}), 400
     def login(self, username, password):
 
