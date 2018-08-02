@@ -114,7 +114,7 @@ class Database:
         self.cursor.execute("""INSERT INTO diary_entries (id, entry_title, description)
                             VALUES (%s, %s, %s)""", (current_user, title, description, ))
         self.conn.commit()
-        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s entry_id = (SELECT MAX(entry_id) FROM diary_entries)""", (current_user,))
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND entry_id = (SELECT MAX(entry_id) FROM diary_entries)""", (current_user,))
         data = self.cursor.fetchone()
         return jsonify({'Entry': data, 'message' : 'Entry created successfully'}), 200
         
