@@ -33,7 +33,7 @@ Create a virtual environment and activate it.[Refer here](https://docs.python.or
 
 - Create a postgres database to use with the application.
 
-- Create a .env file following the examples given in the .env.var file and add all the required environment variables to run the application.
+- Create a .env file following the example given in the .env.example file and add all the required environment variables to run the application.
 
 - Populate the environment with the variables in the .env file
 
