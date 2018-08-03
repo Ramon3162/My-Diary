@@ -15,7 +15,7 @@ class TestEntryCase(BaseTestClass):
                                     data=json.dumps(self.entry_contents),
                                     content_type='application/json',
                                     headers={"Authorization":"Bearer {}".format(token)})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'Entry created successfully')
 
