@@ -43,13 +43,13 @@
             <div id="entry-form-content">
                 <form action="" method="POST" id="new-entry-form">
                     <div id="form-input">
-                        <input type="text" name="title" placeholder="Entry Title">
+                        <input type="text" name="title" id="title" placeholder="Entry Title">
                     </div id="form-input">
                     <div>
-                        <textarea name="entry" rows="7" placeholder="Entry Text"></textarea>
+                        <textarea name="entry" id="description" rows="7" placeholder="Entry Text"></textarea>
                     </div id="form-input">
                     <div>
-                        <input type="submit" value="Publish Entry" class="submit-btn" formaction="entry.html">
+                        <input type="button" value="Publish Entry" onclick="publishEntry()" class="submit-btn">
                     </div>
                 </form>  
             </div>          
@@ -62,5 +62,6 @@
         </div>
         <!--Adding javascript files-->
         <script type="text/javascript" src="static/js/main.js"></script>
+        <script type="text/javascript" src="static/js/api.js"></script>
     </body>
 </html> 
