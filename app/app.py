@@ -117,6 +117,10 @@ def login():
 def entry_not_found(error):
     return make_response(jsonify({'Error': 'Invalid input'}), 404)
 
+@app.errorhandler(500)
+def server_error(error):
+    return make_response(jsonify({'Error': 'Internal server error'}), 500)
+
 @app.route("/")
 def index():
     return render_template("documentation.html")
