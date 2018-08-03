@@ -6,7 +6,6 @@ import psycopg2
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import (
     JWTManager, create_access_token)
-from instance.config import app_config
 
 app = Flask(__name__, instance_relative_config=True)
 
@@ -83,12 +82,11 @@ class Database:
                 self.cursor.execute("""INSERT INTO diary_users (username, password, email)
                                     VALUES (%(username)s, %(password)s, %(email)s)""", user_data)
                 self.conn.commit()
-                self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
-                data = self.cursor.fetchone()
-                return jsonify({'User' : data, 'message' : 'User created successfully'}), 201
+                # self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
+                # data = self.cursor.fetchone()
+                return jsonify({'message' : 'User created successfully'}), 201
             return jsonify({'message' : 'Email already exists'}), 400
         return jsonify({'message' : 'Username already exists'}), 400
-    
     def login(self, username, password):
         """User login"""
         credentials = request.get_json()
@@ -111,7 +109,8 @@ class Database:
 
     def add_entry(self, current_user, title, description):
         """Adds new entry to tha database"""
-        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND description = %s AND entry_title = %s""", (current_user, description, title, ))
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND description = %s AND entry_title = %s""",
+                            (current_user, description, title, ))
         result = self.cursor.fetchall()
         if result:
             return jsonify({'message' : 'You cannot publish a duplicate entry.'}), 400
@@ -120,12 +119,12 @@ class Database:
         self.conn.commit()
         self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND entry_id = (SELECT MAX(entry_id) FROM diary_entries)""", (current_user,))
         data = self.cursor.fetchone()
-        return jsonify({'Entry': data, 'message' : 'Entry created successfully'}), 200
-        
+        return jsonify({'Entry': data, 'message' : 'Entry created successfully'}), 201        
 
     def get_one_entry(self, entry_id, current_user):
         """Allows for viewing of one diary entry"""
-        self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s AND id = %s""", (entry_id, current_user, ))
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s AND id = %s""",
+                            (entry_id, current_user, ))
         data = self.cursor.fetchall()
         if data:
             return jsonify({'Entry' : data, 'message' : 'Entry retrieved successfully'}), 200
@@ -142,7 +141,8 @@ class Database:
     def update_entry(self, entry_id, title, description, current_user):
         """Allows for the updating of a single diary entry"""
 
-        self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s AND id = %s""", (entry_id, current_user, ))
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s AND id = %s""",
+                            (entry_id, current_user, ))
         data = self.cursor.fetchall()
         if data:
             self.cursor.execute("""UPDATE diary_entries set entry_title = %s,
@@ -156,7 +156,8 @@ class Database:
     def delete_entry(self, entry_id, current_user):
         """Allows for the deletion of one diary entry"""
 
-        self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s AND id = %s""", (entry_id, current_user, ))
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s AND id = %s""",
+                            (entry_id, current_user, ))
         data = self.cursor.fetchall()
         if data:
             self.cursor.execute("""DELETE FROM diary_entries WHERE entry_id = %s""", (entry_id, ))
