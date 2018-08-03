@@ -12,15 +12,21 @@
                 <img src="static/img/logo.png" alt="MyDiary">
             </div>
             <form action="" method="POST">
-                <input type="text" name="username" placeholder="Username">
-                <input type="text" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
-                <input type="password" name="confirm_password" placeholder="Confirm Password">
-                <input type="submit" value="Sign Up" class="submit-btn">
+                <input type="text" name="username" id="username" placeholder="Username">
+                <input type="text" name="email" id="email" placeholder="Email">
+                <input type="password" name="password" id="password" placeholder="Password">
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                <input type="button" value="Sign Up" onclick="registerUser()" class="submit-btn">
             </form>
+            <div>
+                <p id="error-message"></p>
+            <div>
         </div>
         <div class="page-info">
             <p>Already have an account? <a href="login.html">Log in</a></p>
         </div>
+        <!--Adding scripts -->
+        <script type="text/javascript" src="static/js/main.js"></script>
+        <script type="text/javascript" src="static/js/api.js"></script>
     </body>
 </html>  
