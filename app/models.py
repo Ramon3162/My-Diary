@@ -98,11 +98,11 @@ class Database:
         data = self.cursor.fetchone()
         self.cursor.execute("""SELECT user_id FROM diary_users WHERE username = %s""",
                             (username, ))
-        id = self.cursor.fetchone()
+        id_data = self.cursor.fetchone()
         if data:
             if bcrypt.check_password_hash(data[0], password):
                 expiration = timedelta(minutes=30)
-                access_token = create_access_token(identity=id, expires_delta=expiration)
+                access_token = create_access_token(identity=id_data, expires_delta=expiration)
                 return jsonify({'token' : access_token, 'message':'Login successfull'}), 200
             return jsonify({'message':'Password is invalid'}), 400
         return jsonify({'message' : 'Username is invalid'}), 400
@@ -119,8 +119,7 @@ class Database:
         self.conn.commit()
         self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND entry_id = (SELECT MAX(entry_id) FROM diary_entries)""", (current_user,))
         data = self.cursor.fetchone()
-        return jsonify({'Entry': data, 'message' : 'Entry created successfully'}), 201        
-
+        return jsonify({'Entry': data, 'message' : 'Entry created successfully'}), 201
     def get_one_entry(self, entry_id, current_user):
         """Allows for viewing of one diary entry"""
         self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s AND id = %s""",
