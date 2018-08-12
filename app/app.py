@@ -4,9 +4,9 @@ import os
 from flask import Flask, jsonify, abort, request, render_template, make_response
 from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 from app.models import Database
 from instance.config import app_config
-from flask_cors import CORS
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(app_config[os.getenv('APP_SETTINGS')])
@@ -38,7 +38,7 @@ def entries():
         if len(title.strip(" ")) < 1:
             return jsonify({'message' : 'Entry title cannot be empty.'}), 400
         elif len(description.strip(" ")) < 1:
-            return jsonify({'message' : 'Entry description cannot be empty.'}),400
+            return jsonify({'message' : 'Entry description cannot be empty.'}), 400
         Database().create_entry_table()
         return Database().add_entry(current_user, title, description)
 
@@ -114,13 +114,17 @@ def login():
     return Database().login(password, username)
 
 @app.errorhandler(404)
-def entry_not_found(error):
+def entry_not_found():
+    """404 Error Handler"""
     return make_response(jsonify({'Error': 'Invalid input'}), 404)
 
 @app.errorhandler(500)
-def server_error(error):
+def server_error():
+    """500 Error Handler"""
     return make_response(jsonify({'Error': 'Internal server error'}), 500)
 
 @app.route("/")
 def index():
+    """Template to redirect to the documentation"""
     return render_template("documentation.html")
+    
