@@ -78,9 +78,9 @@ class TestEntryCase(BaseTestClass):
         login = self.login_user()
         token = json.loads(login.data.decode("UTF-8"))['token']
         self.client.post('/api/v1/entries',
-                                data=json.dumps(self.entry_contents),
-                                content_type='application/json',
-                                headers={"Authorization":"Bearer {}".format(token)})
+                         data=json.dumps(self.entry_contents),
+                         content_type='application/json',
+                         headers={"Authorization":"Bearer {}".format(token)})
         response = self.client.post('/api/v1/entries',
                                     data=json.dumps(self.entry_contents),
                                     content_type='application/json',
