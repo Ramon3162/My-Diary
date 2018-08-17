@@ -60,3 +60,20 @@ const loginUser = () => {
         console.log(data.message)
     })
   }
+
+  const getEntries = () => {
+    fetch('http://127.0.0.1:5000/api/v1/entries', {
+      headers: {
+        'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
+        'Content-type' : 'application/json;'
+      }
+    })
+    .then(response => response.json())
+    .then(entriesData => {
+      if(entriesData.message === "All entries found successfully"){
+        window.location.href = "./entry_list.html";
+      }else{
+          document.getElementById('error-message').innerHTML = entriesData.message;
+      }
+    })
+  }
