@@ -12,11 +12,11 @@ const registerUser = () => {
       }
       })
       .then(response => response.json())
-      .then(data => {
-        if(data.message === "User created successfully"){
-            document.getElementById('error-message').innerHTML = "Your account has been created successfully.";
+      .then(registerData => {
+        if(registerData.message === "User created successfully"){
+          window.location.href = "./login.html";
         }else{
-            document.getElementById('error-message').innerHTML = data.message;
+            document.getElementById('error-message').innerHTML = registerData.message;
         }
       })
   }
@@ -33,11 +33,12 @@ const loginUser = () => {
       }
     })
     .then(response => response.json())
-    .then(data => {
-        if(data.message === "Login successfull"){
+    .then(loginData => {
+        if(loginData.message === "Login successfull"){
             window.location.href = "./profile.html";
+            sessionStorage.setItem("token",loginData.token);
         }else{
-            document.getElementById('error-message').innerHTML = data.message;
+            document.getElementById('error-message').innerHTML = loginData.message;
         }
     })
   }
@@ -50,12 +51,30 @@ const loginUser = () => {
         description: document.getElementById('description').value
       }),
       headers: {
-        Authorization: `Bearer `,
+        'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
         'Content-type' : 'application/json;'
       }
     })
     .then(response => response.json())
     .then(data => {
         console.log(data.message)
+    })
+  }
+
+  const getEntries = () => {
+    fetch('http://127.0.0.1:5000/api/v1/entries', {
+      headers: {
+        'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
+        'Content-type' : 'application/json;'
+      }
+    })
+    .then(response => response.json())
+    .then(entriesData => {
+      if(entriesData.message === "All entries found successfully"){
+        window.location.href = "./entry_list.html";
+        document.getElementById('message').innerHTML = entriesData.message;
+      }else{
+          document.getElementById('message').innerHTML = entriesData.message;
+      }
     })
   }
