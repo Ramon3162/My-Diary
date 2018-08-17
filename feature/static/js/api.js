@@ -58,10 +58,11 @@ const loginUser = () => {
     .then(response => response.json())
     .then(data => {
       if(data.message === "Entry created successfully"){
+        console.log(data.message);
         window.location.href = "./entry.html";
         document.getElementById('message').innerHTML = data.message;
       }else{
-        document.getElementById('message').innerHTML = entriesData.message;
+        document.getElementById('message').innerHTML = data.message;
       }
     })
   }
@@ -84,8 +85,12 @@ const loginUser = () => {
             <td></td>
             <td>${entriesData.Entries[i].title}</td>
             <td>Date</td>
-            <td><a href="edit_entry.html" id="edit-icons"><i class="fa fa-pencil"></i></a></td>
-            <td><a href="javascript:void(0);" id="edit-icons" onclick="confirmDelete()"><i class="fa fa-trash"></i></a></td>
+            <td><a href="edit_entry.html" id="edit-icons">
+                <i class="fa fa-pencil"></i></a>
+            </td>
+            <td><a href="javascript:void(0);" id="edit-icons" onclick="confirmDelete()">
+                <i class="fa fa-trash"></i></a>
+            </td>
           </tr>`
         }
         console.log(entriesData.message);
