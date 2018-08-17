@@ -72,8 +72,9 @@ const loginUser = () => {
     .then(entriesData => {
       if(entriesData.message === "All entries found successfully"){
         window.location.href = "./entry_list.html";
+        document.getElementById('message').innerHTML = entriesData.message;
       }else{
-          document.getElementById('error-message').innerHTML = entriesData.message;
+          document.getElementById('message').innerHTML = entriesData.message;
       }
     })
   }
