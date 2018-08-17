@@ -3,7 +3,8 @@ import json
 import unittest
 from unittest import TestCase
 from app.app import app
-from app.models import Database
+from app.database import Database
+from app.models import User, Entry
 from instance.config import app_config
 
 
