@@ -1,9 +1,9 @@
-"""Databse handling"""
+"""Models handling"""
 import os
 from datetime import timedelta
 from flask import Flask, jsonify, request
-import psycopg2
 from flask_bcrypt import Bcrypt
+from app.database import Database
 from flask_jwt_extended import (
     JWTManager, create_access_token)
 
@@ -16,58 +16,8 @@ jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
 
-class Database:
-    """Create the database class"""
-    def __init__(self):
-        dbname = os.getenv('DB_NAME')
-        user = os.getenv('DB_USER')
-        password = os.getenv('DB_PASSWORD')
-        host = os.getenv('DB_HOST')
-        port = os.getenv('DB_PORT')
-        self.conn = psycopg2.connect(
-            dbname=dbname,
-            user=user,
-            host=host,
-            password=password,
-            port=port)
-        self.cursor = self.conn.cursor()
-
-    def create_user_table(self):
-        """Creates table to hold user data"""
-        self.cursor.execute("""CREATE TABLE IF NOT EXISTS diary_users(
-                            user_id SERIAL PRIMARY KEY, 
-                            username varchar(30) NOT NULL,
-                            email varchar(30) NOT NULL,
-                            password varchar(150) NOT NULL)""")
-        self.cursor.close()
-        self.conn.commit()
-
-    def create_entry_table(self):
-        """Creates table to hold entry data"""
-        self.cursor.execute("""CREATE TABLE IF NOT EXISTS diary_entries(
-                            entry_id SERIAL,
-                            id INTEGER,
-                            entry_title varchar(50) NOT NULL,
-                            description varchar(300) NOT NULL,
-                            PRIMARY KEY(entry_id, id),
-                            FOREIGN KEY(id) REFERENCES diary_users(user_id));""")
-        self.cursor.close()
-        self.conn.commit()
-
-    def drop_entry_table(self):
-        """Drop enntry table after tests"""
-        self.cursor.execute("""DROP TABLE IF EXISTS diary_entries CASCADE""")
-        self.cursor.close()
-        self.conn.commit()
-        self.conn.close()
-
-    def drop_user_table(self):
-        """Drop user table after every test"""
-        self.cursor.execute("""DROP TABLE IF EXISTS diary_users CASCADE""")
-        self.cursor.close()
-        self.conn.commit()
-        self.conn.close()
-
+class User(Database):
+    """Create the User class"""
     def signup(self, user_data):
         """Create a new user in the database"""
         user = request.get_json()
@@ -87,6 +37,7 @@ class Database:
                 return jsonify({'message' : 'User created successfully'}), 201
             return jsonify({'message' : 'Email already exists'}), 400
         return jsonify({'message' : 'Username already exists'}), 400
+    
     def login(self, username, password):
         """User login"""
         credentials = request.get_json()
@@ -107,6 +58,8 @@ class Database:
             return jsonify({'message':'Password is invalid'}), 400
         return jsonify({'message' : 'Username is invalid'}), 400
 
+class Entry(Database):
+    """Class to handle entries"""
     def add_entry(self, current_user, title, description):
         """Adds new entry to tha database"""
         self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND description = %s AND entry_title = %s""",
@@ -119,14 +72,14 @@ class Database:
         self.conn.commit()
         self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND entry_id = (SELECT MAX(entry_id) FROM diary_entries)""", (current_user,))
         data = self.cursor.fetchone()
-        return jsonify({'Entry': data, 'message' : 'Entry created successfully'}), 201
+        return jsonify({'Entry': Entry().display_entry(data), 'message' : 'Entry created successfully'}), 201
     def get_one_entry(self, entry_id, current_user):
         """Allows for viewing of one diary entry"""
         self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s AND id = %s""",
                             (entry_id, current_user, ))
-        data = self.cursor.fetchall()
+        data = self.cursor.fetchone()
         if data:
-            return jsonify({'Entry' : data, 'message' : 'Entry retrieved successfully'}), 200
+            return jsonify({'Entry' : Entry().display_entry(data), 'message' : 'Entry retrieved successfully'}), 200
         return jsonify({'message' : 'Entry not found'})
 
     def get_all_entries(self, current_user):
@@ -134,7 +87,7 @@ class Database:
         self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s""", (current_user,))
         data = self.cursor.fetchall()
         if data:
-            return jsonify({'Entries' : data, 'message' : 'All entries found successfully'})
+            return jsonify({'Entries' : [Entry().display_entry(entry) for entry in data], 'message' : 'All entries found successfully'})
         return jsonify({'message': 'No entries found'})
 
     def update_entry(self, entry_id, title, description, current_user):
@@ -149,7 +102,7 @@ class Database:
             self.conn.commit()
             self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s""", (entry_id, ))
             updated_data = self.cursor.fetchone()
-            return jsonify({'Entry' : updated_data, 'message' : 'Entry updated successfully'}), 200
+            return jsonify({'Entry' : Entry().display_entry(updated_data), 'message' : 'Entry updated successfully'}), 200
         return jsonify({'message' : 'Entry not found'})
 
     def delete_entry(self, entry_id, current_user):
@@ -163,4 +116,13 @@ class Database:
             self.conn.commit()
             return jsonify({'message' : 'Entry deleted successfully'}), 200
         return jsonify({'message' : 'Entry not found.'}), 400
+
+    def display_entry(self,entry):
+        """Dictionary to hold entry data"""
+        return dict(
+            id=entry[0],
+            user_id=entry[1],
+            title=entry[2],
+            description=entry[3]
+        )
             
