@@ -5,7 +5,8 @@ from flask import Flask, jsonify, abort, request, render_template, make_response
 from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from app.models import Database
+from app.models import User, Entry
+from app.database import Database
 from instance.config import app_config
 
 app = Flask(__name__, instance_relative_config=True)
@@ -25,7 +26,7 @@ def entries():
     current_user = get_jwt_identity()[0]
     if request.method == 'GET':
         Database().create_entry_table()
-        return Database().get_all_entries(current_user)
+        return Entry().get_all_entries(current_user)
     else:
         if not request.json:
             abort(400)
@@ -40,7 +41,7 @@ def entries():
         elif len(description.strip(" ")) < 1:
             return jsonify({'message' : 'Entry description cannot be empty.'}), 400
         Database().create_entry_table()
-        return Database().add_entry(current_user, title, description)
+        return Entry().add_entry(current_user, title, description)
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['GET', 'PUT', 'DELETE'])
 @jwt_required
@@ -50,15 +51,15 @@ def manipulate_entries(entry_id):
     current_user = get_jwt_identity()[0]
     if request.method == 'GET':
         Database().create_entry_table()
-        return Database().get_one_entry(entry_id, current_user)
+        return Entry().get_one_entry(entry_id, current_user)
     elif request.method == 'PUT':
         title = request.json['title']
         description = request.json['description']
         Database().create_entry_table()
-        return Database().update_entry(entry_id, title, description, current_user)
+        return Entry().update_entry(entry_id, title, description, current_user)
     else:
         Database().create_entry_table()
-        return Database().delete_entry(entry_id, current_user)
+        return Entry().delete_entry(entry_id, current_user)
 
 @app.route('/auth/signup', methods=['POST'])
 def signup():
@@ -97,7 +98,7 @@ def signup():
         'email': email,
         }
     Database().create_user_table()
-    return Database().signup(user_data)
+    return User().signup(user_data)
 
 @app.route('/auth/login', methods=['POST'])
 def login():
@@ -111,15 +112,15 @@ def login():
     username = request.json['username']
     password = request.json['password']
     Database().create_user_table()
-    return Database().login(password, username)
+    return User().login(password, username)
 
 @app.errorhandler(404)
-def entry_not_found():
+def entry_not_found(error):
     """404 Error Handler"""
     return make_response(jsonify({'Error': 'Invalid input'}), 404)
 
 @app.errorhandler(500)
-def server_error():
+def server_error(error):
     """500 Error Handler"""
     return make_response(jsonify({'Error': 'Internal server error'}), 500)
 
