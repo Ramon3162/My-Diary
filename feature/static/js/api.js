@@ -57,7 +57,12 @@ const loginUser = () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data.message)
+      if(data.message === "Entry created successfully"){
+        window.location.href = "./entry.html";
+        document.getElementById('message').innerHTML = data.message;
+      }else{
+        document.getElementById('message').innerHTML = entriesData.message;
+      }
     })
   }
 
