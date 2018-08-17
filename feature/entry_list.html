@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="static/css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    <body id="body" class="entry-list-body">
+    <body onload="getEntries()" id="body" class="entry-list-body">
         <div id="menu">
             <div id="top-menu" class="navigation">
                 <div class="logo">
@@ -41,7 +41,7 @@
                     <h2>My Entries</h2>
                     <hr>
                     <div id="entry-content">
-                        <table class="css-serial">
+                        <table id="entry-data" class="css-serial">
                             <tr>
                                 <th>No</th>
                                 <th>Entry Title</th>
@@ -49,34 +49,13 @@
                                 <th></th>
                                 <th><a href="new_entry.html" id="edit-icons"><i class="fa fa-plus"></i></a></th>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td></td>
                                 <td><a href="entry.html">Swimming with dolphines</a></td>
                                 <td>20/2/2018</td>
                                 <td><a href="edit_entry.html" id="edit-icons"><i class="fa fa-pencil"></i></a></td>
                                 <td><a href="javascript:void(0);" id="edit-icons" onclick="confirmDelete()"><i class="fa fa-trash"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="entry.html">Going on a Safari</a></td>
-                                <td>21/2/2018</td>
-                                <td><a href="edit_entry.html" id="edit-icons"><i class="fa fa-pencil"></i></a></td>
-                                <td><a href="javascript:void(0);" id="edit-icons" onclick="confirmDelete()"><i class="fa fa-trash"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="entry.html">The days that followed</a></td>
-                                <td>21/2/2018</td>
-                                <td><a href="edit_entry.html" id="edit-icons"><i class="fa fa-pencil"></i></a></td>
-                                <td><a href="javascript:void(0);" id="edit-icons" onclick="confirmDelete()"><i class="fa fa-trash"></i></a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="entry.html">Trip to the coast</a></td>
-                                <td>21/2/2018</td>
-                                <td><a href="edit_entry.html" id="edit-icons"><i class="fa fa-pencil"></i></a></td>
-                                <td><a href="javascript:void(0);" id="edit-icons" onclick="confirmDelete()"><i class="fa fa-trash"></i></a></td>
-                            </tr>
+                            </tr> -->
                         </table>
                     </div>
                 </div>
@@ -90,6 +69,7 @@
         </div>
 
         <!--Adding javascript files-->
+        <script type="text/javascript" src="static/js/api.js"></script>
         <script type="text/javascript" src="static/js/main.js"></script>
     </body>
 </html> 
