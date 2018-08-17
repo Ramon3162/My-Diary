@@ -14,7 +14,7 @@ const registerUser = () => {
       .then(response => response.json())
       .then(data => {
         if(data.message === "User created successfully"){
-            document.getElementById('error-message').innerHTML = "Your account has been created successfully.";
+          window.location.href = "./login.html";
         }else{
             document.getElementById('error-message').innerHTML = data.message;
         }
