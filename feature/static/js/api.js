@@ -58,13 +58,19 @@ const loginUser = () => {
     .then(response => response.json())
     .then(data => {
       if(data.message === "Entry created successfully"){
-        console.log(data.message);
         window.location.href = "./entry.html";
-        document.getElementById('message').innerHTML = data.message;
+        console.log(data.message);
+        sessionStorage.setItem("title",data.Entry.title);
+        sessionStorage.setItem("description",data.Entry.description);
       }else{
         document.getElementById('message').innerHTML = data.message;
       }
     })
+  }
+
+  const showSingleEntry = () => {
+    document.getElementById('title-section').innerHTML += `<h2>${sessionStorage.getItem("title")}</h2>`;
+    document.getElementById('diary-content').innerHTML += `<p>${sessionStorage.getItem("description")}</p>`;
   }
 
   const getEntries = () => {
