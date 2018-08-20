@@ -37,7 +37,7 @@ def entries():
             return jsonify({'message' : 'Description is required'}), 400
         title = request.json['title']
         description = request.json['description']
-        date_posted =(datetime.now()).strftime("%x")
+        date_posted =datetime.utcnow().isoformat()
         if len(title.strip(" ")) < 1:
             return jsonify({'message' : 'Entry title cannot be empty.'}), 400
         elif len(description.strip(" ")) < 1:
