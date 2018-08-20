@@ -89,7 +89,7 @@ const loginUser = () => {
           document.getElementById('entry-data').innerHTML += `
           <tr>
             <td></td>
-            <td>${entriesData.Entries[i].title}</td>
+            <td><a href="javascript:void(0);" id="${entriesData.Entries[i].id}" onclick="getEntryId()">${entriesData.Entries[i].title}</a></td>
             <td>Date</td>
             <td><a href="edit_entry.html" id="edit-icons">
                 <i class="fa fa-pencil"></i></a>
@@ -104,4 +104,8 @@ const loginUser = () => {
         document.getElementById('message').innerHTML = entriesData.message;
       }
     })
+  }
+
+  const getEntryId = () => {
+    console.log(event.srcElement.id);
   }
