@@ -1,6 +1,7 @@
 """API routes"""
 import re
 import os
+from datetime import datetime
 from flask import Flask, jsonify, abort, request, render_template, make_response
 from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity
 from flask_bcrypt import Bcrypt
@@ -36,12 +37,13 @@ def entries():
             return jsonify({'message' : 'Description is required'}), 400
         title = request.json['title']
         description = request.json['description']
+        date_posted =datetime.utcnow().isoformat()
         if len(title.strip(" ")) < 1:
             return jsonify({'message' : 'Entry title cannot be empty.'}), 400
         elif len(description.strip(" ")) < 1:
             return jsonify({'message' : 'Entry description cannot be empty.'}), 400
         Database().create_entry_table()
-        return Entry().add_entry(current_user, title, description)
+        return Entry().add_entry(current_user, title, description, date_posted)
 
 @app.route('/api/v1/entries/<int:entry_id>', methods=['GET', 'PUT', 'DELETE'])
 @jwt_required

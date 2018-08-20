@@ -57,8 +57,23 @@ const loginUser = () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data.message)
+      if(data.message === "Entry created successfully"){
+        window.location.href = "./entry.html";
+        console.log(data.message);
+        sessionStorage.setItem("title",data.Entry.title);
+        sessionStorage.setItem("description",data.Entry.description);
+        sessionStorage.setItem("date",data.Entry.date_posted);
+      }else{
+        document.getElementById('message').innerHTML = data.message;
+      }
     })
+  }
+
+  const showSingleEntry = () => {
+    document.getElementById('title-section').innerHTML += 
+      `<h2>${sessionStorage.getItem("title")}</h2>
+      <p>${sessionStorage.getItem("date")}</p>`;
+    document.getElementById('diary-content').innerHTML += `<p>${sessionStorage.getItem("description")}</p>`;
   }
 
   const getEntries = () => {
@@ -71,10 +86,29 @@ const loginUser = () => {
     .then(response => response.json())
     .then(entriesData => {
       if(entriesData.message === "All entries found successfully"){
-        window.location.href = "./entry_list.html";
-        document.getElementById('message').innerHTML = entriesData.message;
+        let i;
+        for(i = 0; i < entriesData.Entries.length; i++){
+          console.log(entriesData.Entries.length);
+          document.getElementById('entry-data').innerHTML += `
+          <tr>
+            <td></td>
+            <td><a href="javascript:void(0);" id="${entriesData.Entries[i].id}" onclick="getEntryId()">${entriesData.Entries[i].title}</a></td>
+            <td>${entriesData.Entries[i].date_posted}</td>
+            <td><a href="edit_entry.html" id="edit-icons">
+                <i class="fa fa-pencil"></i></a>
+            </td>
+            <td><a href="javascript:void(0);" id="edit-icons" onclick="confirmDelete()">
+                <i class="fa fa-trash"></i></a>
+            </td>
+          </tr>`
+        }
+        console.log(entriesData.message);
       }else{
-          document.getElementById('message').innerHTML = entriesData.message;
+        document.getElementById('message').innerHTML = entriesData.message;
       }
     })
+  }
+
+  const getEntryId = () => {
+    console.log(event.srcElement.id);
   }

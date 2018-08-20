@@ -36,6 +36,7 @@ class Database:
                             id INTEGER,
                             entry_title varchar(50) NOT NULL,
                             description varchar(300) NOT NULL,
+                            date_posted timestamp NOT NULL,
                             PRIMARY KEY(entry_id, id),
                             FOREIGN KEY(id) REFERENCES diary_users(user_id));""")
         self.cursor.close()

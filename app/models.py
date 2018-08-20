@@ -60,15 +60,15 @@ class User(Database):
 
 class Entry(Database):
     """Class to handle entries"""
-    def add_entry(self, current_user, title, description):
+    def add_entry(self, current_user, title, description, date_posted):
         """Adds new entry to tha database"""
         self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND description = %s AND entry_title = %s""",
                             (current_user, description, title, ))
         result = self.cursor.fetchall()
         if result:
             return jsonify({'message' : 'You cannot publish a duplicate entry.'}), 400
-        self.cursor.execute("""INSERT INTO diary_entries (id, entry_title, description)
-                            VALUES (%s, %s, %s)""", (current_user, title, description, ))
+        self.cursor.execute("""INSERT INTO diary_entries (id, entry_title, description, date_posted)
+                            VALUES (%s, %s, %s, %s)""", (current_user, title, description, date_posted,))
         self.conn.commit()
         self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND entry_id = (SELECT MAX(entry_id) FROM diary_entries)""", (current_user,))
         data = self.cursor.fetchone()
@@ -123,6 +123,7 @@ class Entry(Database):
             id=entry[0],
             user_id=entry[1],
             title=entry[2],
-            description=entry[3]
+            description=entry[3],
+            date_posted=entry[4].strftime("%Y-%m-%d")
         )
             
