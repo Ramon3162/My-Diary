@@ -98,6 +98,7 @@ def signup():
         'username': username,
         'password': hashed_password,
         'email': email,
+        'status': 'Update your bio',
         }
     Database().create_user_table()
     return User().signup(user_data)
