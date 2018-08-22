@@ -1,5 +1,10 @@
+let signupUrl = 'http://127.0.0.1:5000/auth/signup';
+let loginUrl = 'http://127.0.0.1:5000/auth/login';
+let entriesUrl = 'http://127.0.0.1:5000/api/v1/entries';
+
+
 const registerUser = () => {
-    fetch('http://127.0.0.1:5000/auth/signup', {
+    fetch(signupUrl, {
       method: 'POST',
       body: JSON.stringify({
         username: document.getElementById('username').value,
@@ -22,7 +27,7 @@ const registerUser = () => {
   }
   
 const loginUser = () => {
-    fetch('http://127.0.0.1:5000/auth/login', {
+    fetch(loginUrl, {
       method: 'POST',
       body: JSON.stringify({
         username: document.getElementById('username').value,
@@ -44,7 +49,61 @@ const loginUser = () => {
   }
  
   const publishEntry = () => {
-    fetch('http://127.0.0.1:5000/api/v1/entries', {
+    fetch(entriesUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value
+      }),
+      headers: {
+        'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
+        'Content-type' : 'application/json;'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if(data.message === "Entry created successfully"){
+        window.location.href = "./entry.html";
+        console.log(data.message);
+        sessionStorage.setItem("title",data.Entry.title);
+        sessionStorage.setItem("description",data.Entry.description);
+        sessionStorage.setItem("date",data.Entry.date_posted);
+      }else{
+        document.getElementById('message').innerHTML = data.message;
+      }
+    })
+  }
+
+  const getSingleEntry = () => {
+    let entry_id = event.srcElement.id;
+    console.log(entry_id);
+    fetch( `http://127.0.0.1:5000/api/v1/entries/${entry_id}`, {
+      headers: {
+        'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
+        'Content-type' : 'applicatin/json;'
+      }
+    })
+    .then(response => response.json())
+    .then(entryData => {
+      if(entryData.message === "Entry retrieved successfully"){
+        window.location.href = "./entry.html";
+        console.log(entryData.message);
+        sessionStorage.removeItem("title");
+        sessionStorage.removeItem("description");
+        sessionStorage.removeItem("date");
+        sessionStorage.setItem("title",entryData.Entry.title);
+        sessionStorage.setItem("description",entryData.Entry.description);
+        sessionStorage.setItem("date",entryData.Entry.date_posted);
+      }else{
+        document.getElementById('message').innerHTML = entryData.message;
+      }
+    })
+  }
+
+  const editEntry = () => {
+    let entry_id = event.srcElement.id;
+    console.log(entry_id);
+    fetch( `http://127.0.0.1:5000/api/v1/entries/${entry_id}`, {
       method: 'POST',
       body: JSON.stringify({
         title: document.getElementById('title').value,
@@ -89,16 +148,17 @@ const loginUser = () => {
         let i;
         for(i = 0; i < entriesData.Entries.length; i++){
           console.log(entriesData.Entries.length);
+          sessionStorage.setItem('entry_id', entriesData.Entries[i].id);
           document.getElementById('entry-data').innerHTML += `
           <tr>
             <td></td>
-            <td><a href="javascript:void(0);" id="${entriesData.Entries[i].id}" onclick="getEntryId()">${entriesData.Entries[i].title}</a></td>
+            <td><a href="javascript:void(0);" onclick="getSingleEntry()" id="${entriesData.Entries[i].id}">${entriesData.Entries[i].title}</a></td>
             <td>${entriesData.Entries[i].date_posted}</td>
             <td><a href="edit_entry.html" id="edit-icons">
-                <i class="fa fa-pencil"></i></a>
+                <i class="fa fa-pencil" id="${entriesData.Entries[i].id}"></i></a>
             </td>
-            <td><a href="javascript:void(0);" id="edit-icons" onclick="confirmDelete()">
-                <i class="fa fa-trash"></i></a>
+            <td><a href="javascript:void(0);" id="edit-icons">
+                <i class="fa fa-trash" onclick="confirmDelete()" id="${entriesData.Entries[i].id}"></i></a>
             </td>
           </tr>`
         }
@@ -109,6 +169,6 @@ const loginUser = () => {
     })
   }
 
-  const getEntryId = () => {
-    console.log(event.srcElement.id);
-  }
+  // const getEntryId = () => {
+  //   console.log(event.srcElement.id);
+  // }
