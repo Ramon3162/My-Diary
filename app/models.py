@@ -29,12 +29,12 @@ class User(Database):
         username_data = self.cursor.fetchall()
         if not username_data:
             if not email_data:
-                self.cursor.execute("""INSERT INTO diary_users (username, password, email)
-                                    VALUES (%(username)s, %(password)s, %(email)s)""", user_data)
+                self.cursor.execute("""INSERT INTO diary_users (username, password, email, status)
+                                    VALUES (%(username)s, %(password)s, %(email)s, %(status)s)""", user_data)
                 self.conn.commit()
-                # self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
-                # data = self.cursor.fetchone()
-                return jsonify({'message' : 'User created successfully'}), 201
+                self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
+                data = self.cursor.fetchone()
+                return jsonify({'User': User().display_user(data), 'message' : 'User created successfully'}), 201
             return jsonify({'message' : 'Email already exists'}), 400
         return jsonify({'message' : 'Username already exists'}), 400
     
@@ -57,6 +57,15 @@ class User(Database):
                 return jsonify({'token' : access_token, 'message':'Login successfull'}), 200
             return jsonify({'message':'Password is invalid'}), 400
         return jsonify({'message' : 'Username is invalid'}), 400
+
+    def display_user(self,user):
+        """Dictionary to hold entry data"""
+        return dict(
+            user_id=user[0],
+            username=user[1],
+            email=user[2],
+            status=user[3]
+        )
 
 class Entry(Database):
     """Class to handle entries"""
