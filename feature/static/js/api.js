@@ -16,7 +16,6 @@ const destroyEntrySession = () => {
   sessionStorage.removeItem("date");
 }
 
-
 // const registerUser = () => {
 //     fetch(signupUrl, {
 //       method: 'POST',
@@ -129,41 +128,41 @@ const destroyEntrySession = () => {
 //   })
 // }
 
-// const deleteEntry = (entryId) => {
-//   let confirmation = confirm("Are you sure you want to delete this entry?");
-//   if(confirmation == true){
-//     fetch( `http://127.0.0.1:5000/api/v1/entries/${entryId}`, {
-//       method: 'DELETE',
-//       headers: {
-//         'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
-//         'Content-type' : 'application/json;'
-//       }
-//       })
-//       .then(response => response.json())
-//       .then(data => {
-//         if(data.message === "Entry deleted successfully"){
-//           document.location.replace("./entry_list.html");
-//           console.log(data.message);
-//         }else{
-//           document.getElementById('message').innerHTML = data.message;
-//         }
-//     })
-//   }
-// }
+const deleteEntry = (entryId) => {
+  let confirmation = confirm("Are you sure you want to delete this entry?");
+  if(confirmation == true){
+    fetch( `http://127.0.0.1:5000/api/v1/entries/${entryId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
+        'Content-type' : 'application/json;'
+      }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.message === "Entry deleted successfully"){
+          document.location.replace("./entry_list.html");
+          console.log(data.message);
+        }else{
+          document.getElementById('message').innerHTML = data.message;
+        }
+    })
+  }
+}
 
 
-// const deleteTableEntry = (tableRow) => {
-//   let index = tableRow.parentNode.parentNode.rowIndex;
-//   let entryId = sessionStorage.getItem(index);
-//   console.log(entryId);
-//   deleteEntry(entryId);
-// }
+const deleteTableEntry = (tableRow) => {
+  let index = tableRow.parentNode.parentNode.rowIndex;
+  let entryId = sessionStorage.getItem(index);
+  console.log(entryId);
+  deleteEntry(entryId);
+}
 
-// const deleteViewEntry = () => {
-//   let entryId = sessionStorage.getItem("id");
-//   console.log(entryId);
-//   deleteEntry(entryId);
-// }
+const deleteViewEntry = () => {
+  let entryId = sessionStorage.getItem("id");
+  console.log(entryId);
+  deleteEntry(entryId);
+}
 
 // const getEntry = (entryId) => {
 //   fetch( `http://127.0.0.1:5000/api/v1/entries/${entryId}`, {
