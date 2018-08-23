@@ -71,8 +71,8 @@ class Entry(Database):
     """Class to handle entries"""
     def add_entry(self, current_user, title, description, date_posted):
         """Adds new entry to tha database"""
-        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND description = %s AND entry_title = %s""",
-                            (current_user, description, title, ))
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND entry_title = %s""",
+                            (current_user, title, ))
         result = self.cursor.fetchall()
         if result:
             return jsonify({'message' : 'You cannot publish a duplicate entry.'}), 400
