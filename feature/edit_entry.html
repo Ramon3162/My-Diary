@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="static/css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    <body id="body" class="edit-entry-body">
+    <body id="body" onload="entryData()" class="edit-entry-body">
         <div id="menu">
             <div id="top-menu" class="navigation">
                 <div class="logo">
@@ -43,15 +43,18 @@
             <div id="entry-form-content">
                 <form action="" method="POST" id="edit-entry-form">
                     <div id="form-input">
-                        <input type="text" name="title" placeholder="Entry Title">
+                        <input type="text" name="title" id="title" placeholder="Entry Title">
                     </div id="form-input">
                     <div>
-                        <textarea name="entry" rows="7" placeholder="Entry Text"></textarea>
+                        <textarea name="entry" id="entry" rows="7" placeholder="Entry Text"></textarea>
                     </div id="form-input">
                     <div>
-                        <input type="submit" value="Publish Entry" class="submit-btn" formaction="entry.html">
+                        <input type="button" value="Publish Entry" onclick="editEntry()" class="submit-btn">
                     </div>
-                </form>  
+                </form>
+                <div>
+                    <p id="message"></p>
+                </div> 
             </div>          
         </div>
         
@@ -62,5 +65,6 @@
         </div>
         <!--Adding javascript files-->
         <script type="text/javascript" src="static/js/main.js"></script>
+        <script type="text/javascript" src="static/js/api.js"></script>
     </body>
 </html> 
