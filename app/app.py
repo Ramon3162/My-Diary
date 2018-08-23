@@ -8,6 +8,7 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from app.models import User, Entry
 from app.database import Database
+from app.validators import Validator
 from instance.config import app_config
 
 app = Flask(__name__, instance_relative_config=True)
@@ -29,19 +30,23 @@ def entries():
         Database().create_entry_table()
         return Entry().get_all_entries(current_user)
     else:
-        if not request.json:
-            abort(400)
-        elif not 'title' in request.json:
-            return jsonify({'message' : 'Title is required'}), 400
-        elif not 'description' in request.json:
-            return jsonify({'message' : 'Description is required'}), 400
+        # if not request.json:
+        #     abort(400)
+        # elif not 'title' in request.json:
+        #     return jsonify({'message' : 'Title is required'}), 400
+        # elif not 'description' in request.json:
+        #     return jsonify({'message' : 'Description is required'}), 400
+        # title = request.json['title']
+        # description = request.json['description']
+        # date_posted =datetime.utcnow().isoformat()
+        # if len(title.strip(" ")) < 1:
+        #     return jsonify({'message' : 'Entry title cannot be empty.'}), 400
+        # elif len(description.strip(" ")) < 1:
+        #     return jsonify({'message' : 'Entry description cannot be empty.'}), 400
+        Validator().validate_entry_inputs(request.json)
         title = request.json['title']
         description = request.json['description']
         date_posted =datetime.utcnow().isoformat()
-        if len(title.strip(" ")) < 1:
-            return jsonify({'message' : 'Entry title cannot be empty.'}), 400
-        elif len(description.strip(" ")) < 1:
-            return jsonify({'message' : 'Entry description cannot be empty.'}), 400
         Database().create_entry_table()
         return Entry().add_entry(current_user, title, description, date_posted)
 
@@ -55,18 +60,22 @@ def manipulate_entries(entry_id):
         Database().create_entry_table()
         return Entry().get_one_entry(entry_id, current_user)
     elif request.method == 'PUT':
-        if not request.json:
-            abort(400)
-        elif not 'title' in request.json:
-            return jsonify({'message' : 'Title is required'}), 400
-        elif not 'description' in request.json:
-            return jsonify({'message' : 'Description is required'}), 400
+        # if not request.json:
+        #     abort(400)
+        # elif not 'title' in request.json:
+        #     return jsonify({'message' : 'Title is required'}), 400
+        # elif not 'description' in request.json:
+        #     return jsonify({'message' : 'Description is required'}), 400
+        # title = request.json['title']
+        # description = request.json['description']
+        # if len(title.strip(" ")) < 1:
+        #     return jsonify({'message' : 'Entry title cannot be empty.'}), 400
+        # elif len(description.strip(" ")) < 1:
+        #     return jsonify({'message' : 'Entry description cannot be empty.'}), 400
+
+        Validator().validate_entry_inputs(request.json)
         title = request.json['title']
         description = request.json['description']
-        if len(title.strip(" ")) < 1:
-            return jsonify({'message' : 'Entry title cannot be empty.'}), 400
-        elif len(description.strip(" ")) < 1:
-            return jsonify({'message' : 'Entry description cannot be empty.'}), 400
         Database().create_entry_table()
         return Entry().update_entry(entry_id, title, description, current_user)
     else:
