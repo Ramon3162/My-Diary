@@ -167,4 +167,16 @@ class TestUserCase(BaseTestClass):
         data = json.loads(response.get_data())
         self.assertEqual(data['message'], 'User data updated successfully')
 
+    def test_get_user_data(self):
+        """Test for getting user data"""
+        self.signup_user()
+        login = self.login_user()
+        token = json.loads(login.data.decode("UTF-8"))['token']
+        response = self.client.get('/users/1',
+                                    data=json.dumps(self.user_details),
+                                    content_type='application/json',
+                                    headers={"Authorization":"Bearer {}".format(token)})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.get_data())
+        self.assertEqual(data['message'], 'User retrieved successfully')
     
