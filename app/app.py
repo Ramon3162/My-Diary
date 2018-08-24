@@ -74,8 +74,8 @@ def manipulate_entries(entry_id):
             return jsonify({'message' : 'Entry description cannot be empty.'}), 400
 
         # validate_entry_inputs(request.json)
-        title = request.json['title']
-        description = request.json['description']
+        # title = request.json['title']
+        # description = request.json['description']
         Database().create_entry_table()
         return Entry().update_entry(entry_id, title, description, current_user)
     else:
@@ -141,7 +141,7 @@ def login():
 
 def update_user(user_id):
     """Updates user data"""
-    current_user = get_jwt_identity()[0]
+    # current_user = get_jwt_identity()[0]
     if not request.json:
         return jsonify({'message' : 'Error 400. Request needs to be in JSON format.'}), 400
     elif not 'username' in request.json:
@@ -160,13 +160,9 @@ def update_user(user_id):
         return jsonify({'message' : 'Username should be at least three characters long.'}), 400
     elif not re.match(valid_email, email):
         return jsonify({'message' : 'Invalid email format.'}), 400
-    user_data = {
-        'username': username,
-        'email': email,
-        'status': status,
-        }
+    
     Database().create_user_table()
-    return User().update_user(user_data, current_user)
+    return User().update_user_data(user_id, username, email, status)
 
 
 @app.errorhandler(404)
