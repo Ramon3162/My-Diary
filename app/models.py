@@ -54,9 +54,20 @@ class User(Database):
             if bcrypt.check_password_hash(data[0], password):
                 expiration = timedelta(minutes=30)
                 access_token = create_access_token(identity=id_data, expires_delta=expiration)
-                return jsonify({'token' : access_token, 'message':'Login successfull'}), 200
+                self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
+                data = self.cursor.fetchone()
+                if data:
+                    return jsonify({'token' : access_token, 'User' :User().display_user(data) , 'message':'Login successfull'}), 200
             return jsonify({'message':'Password is invalid'}), 400
         return jsonify({'message' : 'Username is invalid'}), 400
+
+    def get_user_data(self, user_id):
+        """Method to get user data"""
+        self.cursor.execute("SELECT * FROM diary_users WHERE user_id = %s", (user_id, ))
+        data = self.cursor.fetchone()
+        if data:
+            return jsonify({'User' : User().display_user(data), 'message' : 'User retrieved successfully'}), 200
+        return jsonify({'message' : 'User not found'})
     
     def update_user_data(self, user_id, username, email, status):
         """Method to update user data"""
@@ -69,7 +80,7 @@ class User(Database):
             self.cursor.execute("""SELECT * FROM diary_users WHERE user_id = %s""",
                                 (user_id, ))
             updated_data = self.cursor.fetchone()
-            return jsonify({'Entry' : User().display_user(updated_data), 'message' : 'User data updated successfully'}), 200
+            return jsonify({'User' : User().display_user(updated_data), 'message' : 'User data updated successfully'}), 200
         return jsonify({'message' : 'User not found'})
 
 
