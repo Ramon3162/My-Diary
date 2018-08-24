@@ -16,6 +16,20 @@ const destroyEntrySession = () => {
   sessionStorage.removeItem("date");
 }
 
+const setUserSession = (id, username, status) => {
+  sessionStorage.setItem("user_id", id);
+  sessionStorage.setItem("username", username);
+  sessionStorage.setItem("status", status);
+  // sessionStorage.setItem("date", date);
+}
+
+const destroyUserSession = () => {
+  sessionStorage.removeItem("user_id")
+  sessionStorage.removeItem("username");
+  sessionStorage.removeItem("status");
+  // sessionStorage.removeItem("date");
+}
+
 const registerUser = () => {
   fetch(signupUrl, {
     method: 'POST',
@@ -32,7 +46,9 @@ const registerUser = () => {
     .then(response => response.json())
     .then(registerData => {
       if(registerData.message === "User created successfully"){
-        window.location.href = "./login.html";
+        window.location.replace("./login.html");
+        console.log(registerData.User.user_id);
+        sessionStorage.setItem("user_id", registerData.User.user_id);
       }else{
           document.getElementById('error-message').innerHTML = registerData.message;
       }
@@ -54,11 +70,43 @@ const loginUser = () => {
   .then(loginData => {
       if(loginData.message === "Login successfull"){
           window.location.href = "./profile.html";
+          let id = loginData.User.user_id;
+          let username = loginData.User.username;
+          let status = loginData.User.status;
+          setUserSession(id, username, status);
           sessionStorage.setItem("token",loginData.token);
       }else{
           document.getElementById('error-message').innerHTML = loginData.message;
       }
   })
+}
+
+const getUser = (userId) => {
+  fetch( `http://127.0.0.1:5000/users/${userId}`, {
+    headers: {
+     'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
+     'Content-type' : 'applicatin/json;'
+    }
+  })
+  .then(response => response.json())
+  .then(userData => {
+  if(userData.message === "User retrieved successfully"){   
+    console.log(userData.message);    
+    let id = userData.User.user_id;
+    let username = userData.User.username;
+    let status = userData.User.status;
+    destroyUserSession();
+    setUserSession(id, username, status);
+  }else{
+    document.getElementById('message').innerHTML = userData.message;
+  }
+  })
+}
+
+const displayUserData = () => {
+  document.getElementById("username").innerHTML += `<h2>${sessionStorage.getItem("username")}</h2>`;
+  document.getElementById("status").innerHTML += `<p>${sessionStorage.getItem("status")}</p>`;
+
 }
 
 const getEntries = () => {
@@ -175,7 +223,6 @@ const getEntry = (entryId) => {
   .then(entryData => {
   if(entryData.message === "Entry retrieved successfully"){    
     console.log(entryData.message);
-    window.location.replace("./entry.html");
     let id = entryData.Entry.id;
     let title = entryData.Entry.title;
     let desc = entryData.Entry.description;
@@ -192,6 +239,7 @@ const getSingleTableEntry = (tableRow) => {
   let index = tableRow.parentNode.parentNode.rowIndex;
   let entryId = sessionStorage.getItem(index);
   console.log(entryId);
+  window.location.replace("./entry.html");
   getEntry(entryId); 
 }
 
@@ -203,8 +251,8 @@ const showSingleEntry = () => {
   `<p>${sessionStorage.getItem("description")}</p>`;
 }
 
-const editEntry = () => {
-  let entryId = sessionStorage.getItem("id");
+const editEntry = (entryId) => {
+  // let entryId = sessionStorage.getItem("id");
   fetch( `http://127.0.0.1:5000/api/v1/entries/${entryId}`, {
     method: 'PUT',
     body: JSON.stringify({
@@ -220,7 +268,7 @@ const editEntry = () => {
   .then(entryData => {
     if(entryData.message === "Entry updated successfully"){
       console.log(entryData.message);
-      window.location.href = "./entry.html";
+      window.location.replace("./entry.html");
       let id = entryData.Entry.id;
       let title = entryData.Entry.title;
       let desc = entryData.Entry.description;
@@ -237,11 +285,24 @@ const editTableEntry = (tableRow) => {
   let index = tableRow.parentNode.parentNode.rowIndex;
   let entryId = sessionStorage.getItem(index);   
   console.log(entryId);
-  // getEntry(entryId);
+  getEntry(entryId);
+  window.location.href = "./edit_entry.html";
+}
+
+const editViewEntry = () => {
+  let entryId = sessionStorage.getItem("id");
+  console.log(entryId);
+  getEntry(entryId);
+  window.location.href = "./edit_entry.html";
 }
 
 const entryData = () => {
   document.getElementById("title").value = sessionStorage.getItem("title");
   document.getElementById("entry").value = sessionStorage.getItem("description");
+}
+
+const logout = () => {
+  sessionStorage.clear();
+  window.location.replace("./index.html");
 }
     
