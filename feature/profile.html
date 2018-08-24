@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="static/css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    <body id="body" class="profile-body">
+    <body id="body" onload="displayUserData()" class="profile-body">
         <div id="menu">
             <div id="top-menu" class="navigation">
                 <div class="logo">
@@ -26,7 +26,7 @@
                             </div>
                             <div class="dropdown-content">
                                 <a href="#">Reminders</a>
-                                <a href="index.html">Logout</a>
+                                <a href="javascript:void(0);" onclick="logout()">Logout</a>
                             </div>
                         </div>
                         <a href="new_entry.html">Add Entry</a>
@@ -42,14 +42,14 @@
                 </div>
                 <div class="user-profile">
                     <div class="user-info">
-                        <div id="name">
-                            <h2>James Mwangi</h2>
+                        <div id="username">
+                            
                         </div>
-                        <div class="username">
+                        <!-- <div class="username">
                             <p>jmwangi38</p>
-                        </div>
+                        </div> -->
                         <div id="status">
-                            <p>I belong to Jesus</p>
+                            
                         </div>
                     </div>
                     <div class="user-data">
