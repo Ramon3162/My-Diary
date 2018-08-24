@@ -58,17 +58,16 @@ class User(Database):
             return jsonify({'message':'Password is invalid'}), 400
         return jsonify({'message' : 'Username is invalid'}), 400
     
-    def update_user(self, current_user, user_data):
+    def update_user_data(self, user_id, username, email, status):
         """Method to update user data"""
-        user = request.get_json()
-        email = (user['email'])
-        self.cursor.execute("""SELECT * FROM diary_users WHERE email = %s""", (email))
-        data = self.conn.fetchone()
+        self.cursor.execute("SELECT * FROM diary_users WHERE user_id = %s", (user_id, ))
+        data = self.cursor.fetchone()
         if data:
-            self.cursor.execute("""UPDATE diary_users SET(username, email, status)
-                                VALUES (%(username)s, %(email)s, %(status)s""", (user_data))
+            self.cursor.execute("""UPDATE diary_users set username = %s, email = %s,
+                                status = %s""", (username, email, status, ))
             self.conn.commit()
-            self.cursor.execute("""SELECT * FROM diary_users WHERE user_id = %s""", (current_user, ))
+            self.cursor.execute("""SELECT * FROM diary_users WHERE user_id = %s""",
+                                (user_id, ))
             updated_data = self.cursor.fetchone()
             return jsonify({'Entry' : User().display_user(updated_data), 'message' : 'User data updated successfully'}), 200
         return jsonify({'message' : 'User not found'})
