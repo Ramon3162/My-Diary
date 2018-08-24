@@ -65,7 +65,11 @@ class BaseTestClass(TestCase):
             'password' : '123456789'
         }
 
-
+        self.user_update = {
+            'username' : 'Ian',
+            'email' : 'ramonomondi@gmail.com',
+            'status' : 'Life is fleeting'
+        }
 
         self.entry_contents = {
             'title' : 'Trip to oblivion',

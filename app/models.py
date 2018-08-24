@@ -29,12 +29,12 @@ class User(Database):
         username_data = self.cursor.fetchall()
         if not username_data:
             if not email_data:
-                self.cursor.execute("""INSERT INTO diary_users (username, password, email)
-                                    VALUES (%(username)s, %(password)s, %(email)s)""", user_data)
+                self.cursor.execute("""INSERT INTO diary_users (username, password, email, status)
+                                    VALUES (%(username)s, %(password)s, %(email)s, %(status)s)""", user_data)
                 self.conn.commit()
-                # self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
-                # data = self.cursor.fetchone()
-                return jsonify({'message' : 'User created successfully'}), 201
+                self.cursor.execute("SELECT * FROM diary_users WHERE username = %s", (username, ))
+                data = self.cursor.fetchone()
+                return jsonify({'User': User().display_user(data), 'message' : 'User created successfully'}), 201
             return jsonify({'message' : 'Email already exists'}), 400
         return jsonify({'message' : 'Username already exists'}), 400
     
@@ -57,13 +57,37 @@ class User(Database):
                 return jsonify({'token' : access_token, 'message':'Login successfull'}), 200
             return jsonify({'message':'Password is invalid'}), 400
         return jsonify({'message' : 'Username is invalid'}), 400
+    
+    def update_user_data(self, user_id, username, email, status):
+        """Method to update user data"""
+        self.cursor.execute("SELECT * FROM diary_users WHERE user_id = %s", (user_id, ))
+        data = self.cursor.fetchone()
+        if data:
+            self.cursor.execute("""UPDATE diary_users set username = %s, email = %s,
+                                status = %s""", (username, email, status, ))
+            self.conn.commit()
+            self.cursor.execute("""SELECT * FROM diary_users WHERE user_id = %s""",
+                                (user_id, ))
+            updated_data = self.cursor.fetchone()
+            return jsonify({'Entry' : User().display_user(updated_data), 'message' : 'User data updated successfully'}), 200
+        return jsonify({'message' : 'User not found'})
+
+
+    def display_user(self,user):
+        """Dictionary to hold entry data"""
+        return dict(
+            user_id=user[0],
+            username=user[1],
+            email=user[2],
+            status=user[3]
+        )
 
 class Entry(Database):
     """Class to handle entries"""
     def add_entry(self, current_user, title, description, date_posted):
         """Adds new entry to tha database"""
-        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND description = %s AND entry_title = %s""",
-                            (current_user, description, title, ))
+        self.cursor.execute("""SELECT * FROM diary_entries WHERE id = %s AND entry_title = %s""",
+                            (current_user, title, ))
         result = self.cursor.fetchall()
         if result:
             return jsonify({'message' : 'You cannot publish a duplicate entry.'}), 400

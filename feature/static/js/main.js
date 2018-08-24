@@ -6,7 +6,3 @@ function openNav() {
         nav.className = "nav-links";
     }
 }
-
-function confirmDelete() {
-    confirm("Are you sure you want to delete this entry?")
-}

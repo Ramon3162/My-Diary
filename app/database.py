@@ -25,6 +25,7 @@ class Database:
                             user_id SERIAL PRIMARY KEY, 
                             username varchar(30) NOT NULL,
                             email varchar(30) NOT NULL,
+                            status varchar(30) NOT NULL,
                             password varchar(150) NOT NULL)""")
         self.cursor.close()
         self.conn.commit()

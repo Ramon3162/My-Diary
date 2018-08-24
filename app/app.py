@@ -8,6 +8,7 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from app.models import User, Entry
 from app.database import Database
+# from app.validators import validate_entry_inputs
 from instance.config import app_config
 
 app = Flask(__name__, instance_relative_config=True)
@@ -30,7 +31,7 @@ def entries():
         return Entry().get_all_entries(current_user)
     else:
         if not request.json:
-            abort(400)
+            return jsonify({'message' : 'Error 400. Request needs to be in JSON format.'}), 400
         elif not 'title' in request.json:
             return jsonify({'message' : 'Title is required'}), 400
         elif not 'description' in request.json:
@@ -42,6 +43,10 @@ def entries():
             return jsonify({'message' : 'Entry title cannot be empty.'}), 400
         elif len(description.strip(" ")) < 1:
             return jsonify({'message' : 'Entry description cannot be empty.'}), 400
+        # validate_entry_inputs(request.json)
+        # title = request.json['title']
+        # description = request.json['description']
+        # date_posted = datetime.utcnow().isoformat()
         Database().create_entry_table()
         return Entry().add_entry(current_user, title, description, date_posted)
 
@@ -55,8 +60,22 @@ def manipulate_entries(entry_id):
         Database().create_entry_table()
         return Entry().get_one_entry(entry_id, current_user)
     elif request.method == 'PUT':
+        if not request.json:
+            return jsonify({'message' : 'Error 400. Request needs to be in JSON format.'}), 400
+        elif not 'title' in request.json:
+            return jsonify({'message' : 'Title is required'}), 400
+        elif not 'description' in request.json:
+            return jsonify({'message' : 'Description is required'}), 400
         title = request.json['title']
         description = request.json['description']
+        if len(title.strip(" ")) < 1:
+            return jsonify({'message' : 'Entry title cannot be empty.'}), 400
+        elif len(description.strip(" ")) < 1:
+            return jsonify({'message' : 'Entry description cannot be empty.'}), 400
+
+        # validate_entry_inputs(request.json)
+        # title = request.json['title']
+        # description = request.json['description']
         Database().create_entry_table()
         return Entry().update_entry(entry_id, title, description, current_user)
     else:
@@ -98,6 +117,7 @@ def signup():
         'username': username,
         'password': hashed_password,
         'email': email,
+        'status': 'Update your bio',
         }
     Database().create_user_table()
     return User().signup(user_data)
@@ -106,7 +126,7 @@ def signup():
 def login():
     """Logs a user into the system"""
     if not request.json:
-        abort(400)
+        return jsonify({'message' : 'Error 400. Request needs to be in JSON format.'}), 400
     elif not 'username' in request.json:
         return jsonify({'message' : 'Username is required'}), 400
     elif not 'password' in request.json:
@@ -115,6 +135,35 @@ def login():
     password = request.json['password']
     Database().create_user_table()
     return User().login(password, username)
+
+@app.route('/users/<int:user_id>', methods=['PUT'])
+@jwt_required
+
+def update_user(user_id):
+    """Updates user data"""
+    # current_user = get_jwt_identity()[0]
+    if not request.json:
+        return jsonify({'message' : 'Error 400. Request needs to be in JSON format.'}), 400
+    elif not 'username' in request.json:
+        return jsonify({'message' : 'Username is required'}), 400
+    elif not 'email' in request.json:
+        return jsonify({'message' : 'Email is required'}), 400
+    username = request.json['username']
+    email = request.json['email']
+    status = request.json['status']
+
+    valid_email = re.compile(r"(^[a-zA-Z0-9_.-]+@[a-zA-Z-]+\.[.a-zA-Z-]+$)")
+    valid_username = re.compile(r"(^[a-zA-Z0-9_.-]+$)")
+    if not re.match(valid_username, username):
+        return jsonify({'message' : 'Username should not have any special characters.'}), 400
+    elif len(username) < 3:
+        return jsonify({'message' : 'Username should be at least three characters long.'}), 400
+    elif not re.match(valid_email, email):
+        return jsonify({'message' : 'Invalid email format.'}), 400
+    
+    Database().create_user_table()
+    return User().update_user_data(user_id, username, email, status)
+
 
 @app.errorhandler(404)
 def entry_not_found(error):
