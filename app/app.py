@@ -136,33 +136,38 @@ def login():
     Database().create_user_table()
     return User().login(password, username)
 
-@app.route('/users/<int:user_id>', methods=['PUT'])
+
+@app.route('/users/<int:user_id>', methods=['PUT', 'GET'])
 @jwt_required
 
-def update_user(user_id):
+def user_handler(user_id):
     """Updates user data"""
-    # current_user = get_jwt_identity()[0]
-    if not request.json:
-        return jsonify({'message' : 'Error 400. Request needs to be in JSON format.'}), 400
-    elif not 'username' in request.json:
-        return jsonify({'message' : 'Username is required'}), 400
-    elif not 'email' in request.json:
-        return jsonify({'message' : 'Email is required'}), 400
-    username = request.json['username']
-    email = request.json['email']
-    status = request.json['status']
+    if request.method == 'GET':
+        Database().create_user_table()
+        return User().get_user_data(user_id)
+    else:
+        # current_user = get_jwt_identity()[0]
+        if not request.json:
+            return jsonify({'message' : 'Error 400. Request needs to be in JSON format.'}), 400
+        elif not 'username' in request.json:
+            return jsonify({'message' : 'Username is required'}), 400
+        elif not 'email' in request.json:
+            return jsonify({'message' : 'Email is required'}), 400
+        username = request.json['username']
+        email = request.json['email']
+        status = request.json['status']
 
-    valid_email = re.compile(r"(^[a-zA-Z0-9_.-]+@[a-zA-Z-]+\.[.a-zA-Z-]+$)")
-    valid_username = re.compile(r"(^[a-zA-Z0-9_.-]+$)")
-    if not re.match(valid_username, username):
-        return jsonify({'message' : 'Username should not have any special characters.'}), 400
-    elif len(username) < 3:
-        return jsonify({'message' : 'Username should be at least three characters long.'}), 400
-    elif not re.match(valid_email, email):
-        return jsonify({'message' : 'Invalid email format.'}), 400
-    
-    Database().create_user_table()
-    return User().update_user_data(user_id, username, email, status)
+        valid_email = re.compile(r"(^[a-zA-Z0-9_.-]+@[a-zA-Z-]+\.[.a-zA-Z-]+$)")
+        valid_username = re.compile(r"(^[a-zA-Z0-9_.-]+$)")
+        if not re.match(valid_username, username):
+            return jsonify({'message' : 'Username should not have any special characters.'}), 400
+        elif len(username) < 3:
+            return jsonify({'message' : 'Username should be at least three characters long.'}), 400
+        elif not re.match(valid_email, email):
+            return jsonify({'message' : 'Invalid email format.'}), 400
+        
+        Database().create_user_table()
+        return User().update_user_data(user_id, username, email, status)
 
 
 @app.errorhandler(404)
