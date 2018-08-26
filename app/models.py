@@ -75,7 +75,7 @@ class User(Database):
         data = self.cursor.fetchone()
         if data:
             self.cursor.execute("""UPDATE diary_users set username = %s, email = %s,
-                                status = %s""", (username, email, status, ))
+                                status = %s WHERE user_id = %s""", (username, email, status, user_id, ))
             self.conn.commit()
             self.cursor.execute("""SELECT * FROM diary_users WHERE user_id = %s""",
                                 (user_id, ))
@@ -133,7 +133,7 @@ class Entry(Database):
         data = self.cursor.fetchall()
         if data:
             self.cursor.execute("""UPDATE diary_entries set entry_title = %s,
-                                description = %s """, (title, description, ))
+                                description = %s WHERE entry_id = %s""", (title, description, entry_id, ))
             self.conn.commit()
             self.cursor.execute("""SELECT * FROM diary_entries WHERE entry_id = %s""", (entry_id, ))
             updated_data = self.cursor.fetchone()
