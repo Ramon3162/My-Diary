@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="static/css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    <body id="body" onload="entryData()" class="edit-entry-body">
+    <body id="body" onload="showEditEntry()" class="edit-entry-body">
         <div id="menu">
             <div id="top-menu" class="navigation">
                 <div class="logo">
@@ -26,7 +26,7 @@
                             </div>
                             <div class="dropdown-content">
                                 <a href="#">Reminders</a>
-                                <a href="index.html">Logout</a>
+                                <a href="javascript:void(0);" onclick="logout()">Logout</a>
                             </div>
                         </div>
                         <a href="new_entry.html">Add Entry</a>
@@ -44,12 +44,12 @@
                 <form action="" method="POST" id="edit-entry-form">
                     <div id="form-input">
                         <input type="text" name="title" id="title" placeholder="Entry Title">
-                    </div id="form-input">
-                    <div>
+                    </div>
+                    <div id="form-input">
                         <textarea name="entry" id="entry" rows="7" placeholder="Entry Text"></textarea>
-                    </div id="form-input">
-                    <div>
-                        <input type="button" value="Publish Entry" onclick="editEntry()" class="submit-btn">
+                    </div>
+                    <div id="form-input-edit">
+                        
                     </div>
                 </form>
                 <div>
