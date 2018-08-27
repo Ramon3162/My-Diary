@@ -62,15 +62,23 @@ const getUser = () => {
   })
   .then(response => response.json())
   .then(userData => {
-  if(userData.message === "User retrieved successfully"){   
-    console.log(userData.message);    
-    document.getElementById("username").innerHTML += `<h2>${userData.User.username}</h2>`;
-    document.getElementById("status").innerHTML += `<p>${userData.User.status}</p>`;
+  if(userData.message === "User retrieved successfully"){
+    if(window.location.href === "file:///C:/Users/user/Desktop/AndelaProject/My-Diary/feature/profile.html"){
+      console.log(userData.message);    
+      document.getElementById("username").innerHTML += `<h2>${userData.User.username}</h2>`;
+      document.getElementById("status").innerHTML += `<p>${userData.User.status}</p>`;
+    }else{
+      document.getElementById("username").value = userData.User.username;
+      document.getElementById("status").value = userData.User.status;
+      document.getElementById("email").value = userData.User.email;
+    }    
   }else{
     document.getElementById('message').innerHTML = userData.message;
   }
   })
 }
+
+
 
 const getEntries = () => {
   fetch(entriesUrl, {
@@ -237,6 +245,36 @@ const editEntry = (entryId) => {
       window.location.replace("./entry.html");
     }else{
       document.getElementById('message').innerHTML = entryData.message;
+    }
+  })
+}
+
+const updateUser = () => {
+  const userId = sessionStorage.getItem("userId");
+  console.log(userId);
+  fetch( `http://127.0.0.1:5000/users/${userId}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      username: document.getElementById('username').value,
+      email: document.getElementById('email').value,
+      status: document.getElementById('status').value
+    }),
+    headers: {
+      'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
+      'Content-type' : 'application/json;'
+    }
+  })
+  .then(response => response.json())
+  .then(userData => {
+    if(userData.message === "User data updated successfully"){
+      document.getElementById("message").innerHTML = userData.message;
+      console.log(userData.message);
+      window.location.replace("./profile.html");
+      let id = userData.User.user_id;
+      sessionStorage.setItem("userId", id);
+    }else{
+      console.log(userData.message);
+      document.getElementById("message").innerHTML = userData.message;
     }
   })
 }

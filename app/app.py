@@ -153,6 +153,8 @@ def user_handler(user_id):
             return jsonify({'message' : 'Username is required'}), 400
         elif not 'email' in request.json:
             return jsonify({'message' : 'Email is required'}), 400
+        elif not 'status' in request.json:
+            return jsonify({'message' : 'Status field is required'}), 400
         username = request.json['username']
         email = request.json['email']
         status = request.json['status']
@@ -165,6 +167,8 @@ def user_handler(user_id):
             return jsonify({'message' : 'Username should be at least three characters long.'}), 400
         elif not re.match(valid_email, email):
             return jsonify({'message' : 'Invalid email format.'}), 400
+        elif len(status.strip(" ")) < 1:
+            return jsonify({'message' : 'Status cannot be empty.'}), 400
         
         Database().create_user_table()
         return User().update_user_data(user_id, username, email, status)
@@ -184,4 +188,3 @@ def server_error(error):
 def index():
     """Template to redirect to the documentation"""
     return render_template("documentation.html")
-    

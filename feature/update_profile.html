@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sign up | My Diary</title>
+        <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    </head>
+    <body id="body" onload="getUser()" class="update-body">
+        <div id="menu">
+            <div id="top-menu" class="navigation">
+                <div class="logo">
+                    <a href="profile.html"><img src="static/img/logo.png" alt="MyDiary"></a>
+                </div>
+                    
+                <div class="navigation">
+                    <div class="toggle-navigation">
+                        <a href="javascript:void(0);" onclick="openNav()">
+                        <i class="fa fa-bars fa-2x"></i></a>
+                    </div>
+                    <div class="nav-links" id="top-navigation">
+                        <div class="dropdown">
+                            <div class="dropbtn">
+                                <a href="#">Settings&nbsp;<i class="fa fa-caret-down"></i></a>
+                            </div>
+                            <div class="dropdown-content">
+                                <a href="#">Reminders</a>
+                                <a href="javascript:void(0);" onclick="logout()">Logout</a>
+                            </div>
+                        </div>
+                        <a href="new_entry.html">Add Entry</a>
+                        <a href="entry_list.html">Entries</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content">
+            <form action="" method="">
+                <input type="text" name="username" id="username" placeholder="Username">
+                <input type="text" name="email" id="email" placeholder="Email">
+                <input type="text" name="status" id="status" placeholder="Status">
+                <input type="button" value="Update Info" onclick="updateUser()" class="submit-btn">
+            </form>
+            <div>
+                <p id="message"></p>
+            <div>
+        </div>
+        <!--Adding scripts -->
+        <script type="text/javascript" src="static/js/main.js"></script>
+        <script type="text/javascript" src="static/js/api.js"></script>
+    </body>
+</html>  
