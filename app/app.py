@@ -46,7 +46,7 @@ def entries():
         # validate_entry_inputs(request.json)
         # title = request.json['title']
         # description = request.json['description']
-        # date_posted = datetime.utcnow().isoformat()
+        date_posted = datetime.utcnow().isoformat()
         Database().create_entry_table()
         return Entry().add_entry(current_user, title, description, date_posted)
 
