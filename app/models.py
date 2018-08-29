@@ -86,11 +86,14 @@ class User(Database):
 
     def display_user(self,user):
         """Dictionary to hold entry data"""
+        self.cursor.execute("""SELECT COUNT(entry_title) FROM diary_entries WHERE id = %s""", (user[0], ))
+        entry_data = self.cursor.fetchone()
         return dict(
             user_id=user[0],
             username=user[1],
             email=user[2],
-            status=user[3]
+            status=user[3],
+            entries=entry_data[0]
         )
 
 class Entry(Database):

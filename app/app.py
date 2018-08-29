@@ -120,6 +120,7 @@ def signup():
         'status': 'Update your bio',
         }
     Database().create_user_table()
+    Database().create_entry_table()
     return User().signup(user_data)
 
 @app.route('/auth/login', methods=['POST'])
@@ -134,6 +135,7 @@ def login():
     username = request.json['username']
     password = request.json['password']
     Database().create_user_table()
+    Database().create_entry_table()
     return User().login(password, username)
 
 
@@ -144,6 +146,7 @@ def user_handler(user_id):
     """Updates user data"""
     if request.method == 'GET':
         Database().create_user_table()
+        Database().create_entry_table()
         return User().get_user_data(user_id)
     else:
         # current_user = get_jwt_identity()[0]
@@ -170,7 +173,9 @@ def user_handler(user_id):
         elif len(status.strip(" ")) < 1:
             return jsonify({'message' : 'Status cannot be empty.'}), 400
         
+        
         Database().create_user_table()
+        Database().create_entry_table()
         return User().update_user_data(user_id, username, email, status)
 
 
