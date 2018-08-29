@@ -67,6 +67,7 @@ const getUser = () => {
       console.log(userData.message);    
       document.getElementById("username").innerHTML += `<h2>${userData.User.username}</h2>`;
       document.getElementById("status").innerHTML += `<p>${userData.User.status}</p>`;
+      document.getElementById("entry-number").innerHTML = `(${userData.User.entries})`;
     }else{
       document.getElementById("username").value = userData.User.username;
       document.getElementById("status").value = userData.User.status;
