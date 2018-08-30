@@ -91,7 +91,6 @@ const getEntries = () => {
     if(entriesData.message === "All entries found successfully"){
       let i;
       for(i = 0; i < entriesData.Entries.length; i++){
-        console.log(entriesData.Entries.length);
         document.getElementById('entry-data').innerHTML += `
         <tr id="${entriesData.Entries[i].id}" onclick="getSingleTableEntry(this.id)">
           <td></td>
@@ -102,7 +101,6 @@ const getEntries = () => {
           <td></td>
         </tr>`
       }
-      console.log(entriesData.message);
     }else{
       let table = document.getElementById('entry-data');
       table.style.display = "none";
@@ -127,7 +125,6 @@ const publishEntry = () => {
   .then(data => {
     if(data.message === "Entry created successfully"){
       window.location.href = "./entry_list.html";
-      console.log(data.message);
       sessionStorage.setItem("id", data.Entry.id);
     }else{
       document.getElementById('message').innerHTML = data.message;
@@ -149,7 +146,6 @@ const deleteEntry = (entryId) => {
       .then(data => {
         if(data.message === "Entry deleted successfully"){
           document.location.replace("./entry_list.html");
-          console.log(data.message);
         }else{
           document.getElementById('message').innerHTML = data.message;
         }
@@ -159,7 +155,6 @@ const deleteEntry = (entryId) => {
 
 
 const getSingleTableEntry = (entryId) => {
-  console.log(entryId);
   sessionStorage.setItem("id", entryId);
   window.location.replace("./entry.html");
 }
@@ -175,7 +170,6 @@ const showSingleEntry = () => {
   .then(response => response.json())
   .then(entryData => {
   if(entryData.message === "Entry retrieved successfully"){    
-    console.log(entryData.message);
     document.getElementById('title-section').innerHTML += 
     `<h2>${entryData.Entry.title}</h2>
     <p>${entryData.Entry.date_posted}</p>`;
@@ -191,14 +185,12 @@ const showSingleEntry = () => {
 }
 
 const editSingleEntry = (entryId) => {
-  console.log(entryId);
   sessionStorage.setItem("id", entryId);
   window.location.replace("./edit_entry.html");
 }
 
 const showEditEntry = () => {
   const entryId = sessionStorage.getItem("id");
-  console.log(entryId);
   fetch( `http://127.0.0.1:5000/api/v1/entries/${entryId}`, {
     headers: {
      'Authorization' : `Bearer ${sessionStorage.getItem("token")}`,
@@ -220,7 +212,6 @@ const showEditEntry = () => {
 
 
 const editEntry = (entryId) => {
-  console.log(entryId);
   fetch( `http://127.0.0.1:5000/api/v1/entries/${entryId}`, {
     method: 'PUT',
     body: JSON.stringify({
@@ -235,7 +226,6 @@ const editEntry = (entryId) => {
   .then(response => response.json())
   .then(entryData => {
     if(entryData.message === "Entry updated successfully"){
-      console.log(entryData.message);
       window.location.replace("./entry_list.html");
     }else{
       document.getElementById('message').innerHTML = entryData.message;
@@ -245,7 +235,6 @@ const editEntry = (entryId) => {
 
 const updateUser = () => {
   const userId = sessionStorage.getItem("userId");
-  console.log(userId);
   fetch( `http://127.0.0.1:5000/users/${userId}`, {
     method: 'PUT',
     body: JSON.stringify({
@@ -261,10 +250,8 @@ const updateUser = () => {
   .then(response => response.json())
   .then(userData => {
     if(userData.message === "User data updated successfully"){
-      console.log(userData.message);
       window.location.replace("./profile.html");
     }else{
-      console.log(userData.message);
       document.getElementById("message").innerHTML = userData.message;
     }
   })
