@@ -41,7 +41,7 @@ const loginUser = () => {
   .then(response => response.json())
   .then(loginData => {
       if(loginData.message === "Login successfull"){
-          window.location.href = "./profile.html";
+          window.location.href = "./entry_list.html";
           let id = loginData.User.user_id;
           sessionStorage.setItem("userId", id);
           sessionStorage.setItem("token",loginData.token);
@@ -79,8 +79,6 @@ const getUser = () => {
   })
 }
 
-
-
 const getEntries = () => {
   fetch(entriesUrl, {
     headers: {
@@ -95,18 +93,13 @@ const getEntries = () => {
       for(i = 0; i < entriesData.Entries.length; i++){
         console.log(entriesData.Entries.length);
         document.getElementById('entry-data').innerHTML += `
-        <tr>
+        <tr id="${entriesData.Entries[i].id}" onclick="getSingleTableEntry(this.id)">
           <td></td>
-          <td><a href="javascript:void(0);" id="${entriesData.Entries[i].id}" onclick="getSingleTableEntry(this.id)">
-            ${entriesData.Entries[i].title}</a>
+          <td>
+            <a href="javascript:void(0);">${entriesData.Entries[i].title}</a>
           </td>
           <td>${entriesData.Entries[i].date_posted}</td>
-          <td><a href="javascript:void(0);" id="edit-icons">
-              <i class="fa fa-pencil" id="${entriesData.Entries[i].id}" onclick="editSingleEntry(this.id)"></i></a>
-          </td>
-          <td><a href="javascript:void(0);" id="edit-icons">
-              <i class="fa fa-trash" id="${entriesData.Entries[i].id}" onclick="deleteEntry(this.id)"></i></a>
-          </td>
+          <td></td>
         </tr>`
       }
       console.log(entriesData.message);
@@ -133,7 +126,7 @@ const publishEntry = () => {
   .then(response => response.json())
   .then(data => {
     if(data.message === "Entry created successfully"){
-      window.location.href = "./entry.html";
+      window.location.href = "./entry_list.html";
       console.log(data.message);
       sessionStorage.setItem("id", data.Entry.id);
     }else{
@@ -243,7 +236,7 @@ const editEntry = (entryId) => {
   .then(entryData => {
     if(entryData.message === "Entry updated successfully"){
       console.log(entryData.message);
-      window.location.replace("./entry.html");
+      window.location.replace("./entry_list.html");
     }else{
       document.getElementById('message').innerHTML = entryData.message;
     }
@@ -268,11 +261,8 @@ const updateUser = () => {
   .then(response => response.json())
   .then(userData => {
     if(userData.message === "User data updated successfully"){
-      document.getElementById("message").innerHTML = userData.message;
       console.log(userData.message);
       window.location.replace("./profile.html");
-      let id = userData.User.user_id;
-      sessionStorage.setItem("userId", id);
     }else{
       console.log(userData.message);
       document.getElementById("message").innerHTML = userData.message;
