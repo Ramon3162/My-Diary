@@ -1,4 +1,4 @@
-function openNav() {
+const openNav = () => {
     let nav = document.getElementById("top-navigation");
     if (nav.className === "nav-links") {
         nav.className += " responsive";
