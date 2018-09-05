@@ -83,6 +83,7 @@ body, html {
     float: none;
     color: #ddd;
     text-decoration: none;
+    padding: 10px 10px;
     display: block;
     text-align: left;
 }
@@ -105,7 +106,7 @@ body, html {
     }
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown-show {
     display: block;
 }
 
@@ -285,7 +286,7 @@ input[type="text"],input[type="password"]{
 
 .profile-section {
     width:70%;
-    min-height:85%;
+    min-height:100%;
     margin:0 auto;
 }
 
@@ -414,7 +415,7 @@ input[type="text"],input[type="password"]{
 
 .entries-section {
     width:70%;
-    min-height:80%;
+    min-height:100%;
     margin:0 auto;
 }
 
@@ -483,7 +484,7 @@ tr:hover {
 
 .entry-section {
     width:70%;
-    min-height:80%;
+    min-height:100%;
     margin:0 auto;
 }
 
@@ -530,7 +531,7 @@ tr:hover {
 .edit-entry,
 .new-entry {
     width:60%;
-    min-height:80%;
+    min-height:100%;
     margin:0 auto;
 }
 
