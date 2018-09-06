@@ -4,8 +4,6 @@ import unittest
 
 from app.app import app
 from app.database import Database
-from app.models import Entry, User
-from instance.config import app_config
 
 
 class BaseTestClass(unittest.TestCase):
@@ -13,7 +11,6 @@ class BaseTestClass(unittest.TestCase):
 
     def setUp(self):
         """App configuration setup"""
-        # self.app = app.config.from_object(app_config['testing'])
         self.client = app.test_client()
 
         self.user_details = {
