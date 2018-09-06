@@ -1,19 +1,19 @@
 """Creating the base class for all the other tests"""
 import json
 import unittest
-from unittest import TestCase
+
 from app.app import app
 from app.database import Database
-from app.models import User, Entry
+from app.models import Entry, User
 from instance.config import app_config
 
 
-class BaseTestClass(TestCase):
+class BaseTestClass(unittest.TestCase):
     """Configuring the base test class for all the test cases"""
 
     def setUp(self):
         """App configuration setup"""
-        self.app = app.config.from_object(app_config['testing'])
+        # self.app = app.config.from_object(app_config['testing'])
         self.client = app.test_client()
 
         self.user_details = {
