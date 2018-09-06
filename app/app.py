@@ -1,13 +1,15 @@
 """API routes"""
-import re
 import os
+import re
 from datetime import datetime
-from flask import Flask, jsonify, abort, request, render_template, make_response
-from flask_jwt_extended import jwt_required, JWTManager, get_jwt_identity
+
+from app.database import Database
+from app.models import Entry, User
+from flask import (Flask, abort, jsonify, make_response, render_template,
+                   request)
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from app.models import User, Entry
-from app.database import Database
+from flask_jwt_extended import JWTManager, get_jwt_identity, jwt_required
 # from app.validators import validate_entry_inputs
 from instance.config import app_config
 
@@ -182,7 +184,7 @@ def user_handler(user_id):
 @app.errorhandler(404)
 def entry_not_found(error):
     """404 Error Handler"""
-    return make_response(jsonify({'Error': 'Invalid input'}), 404)
+    return make_response(jsonify({'Error': 'Invalid input. Please check the input to verify if it is valid.'}), 404)
 
 @app.errorhandler(500)
 def server_error(error):
