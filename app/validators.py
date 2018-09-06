@@ -1,5 +1,7 @@
 import re
+
 from flask import jsonify
+
 
 def validate_entry_inputs(data):
     print(data)
