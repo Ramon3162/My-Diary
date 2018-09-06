@@ -1,11 +1,11 @@
 """Models handling"""
 import os
 from datetime import timedelta
+
+from app.database import Database
 from flask import Flask, jsonify, request
 from flask_bcrypt import Bcrypt
-from app.database import Database
-from flask_jwt_extended import (
-    JWTManager, create_access_token)
+from flask_jwt_extended import JWTManager, create_access_token
 
 app = Flask(__name__, instance_relative_config=True)
 
@@ -164,4 +164,3 @@ class Entry(Database):
             description=entry[3],
             date_posted=entry[4].strftime("%Y-%m-%d")
         )
-            
