@@ -1,5 +1,6 @@
 """Database handling"""
 import os
+
 import psycopg2
 
 
